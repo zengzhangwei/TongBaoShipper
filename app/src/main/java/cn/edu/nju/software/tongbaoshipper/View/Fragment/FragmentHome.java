@@ -38,6 +38,7 @@ import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
 import cn.edu.nju.software.tongbaoshipper.Const.Common;
 import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.View.Activity.PlaceOrderActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.WalletActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Adapter.BannerPagerAdapter;
 import cn.edu.nju.software.tongbaoshipper.Service.UserService;
@@ -80,8 +81,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         // 自动登陆
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         Map<String, String> params = new HashMap<>();
-        params.put("phoneNumber", "15850775808");
-        params.put("password", "12345678");
+        params.put("phoneNumber", "15715155071");
+        params.put("password", "11111111");
         params.put("type", String.valueOf(Common.USER_TYPE_SHIPPER));
         Request<JSONObject> request = new PostRequest(Net.URL_USER_LOGIN,
                 new Response.Listener<JSONObject>() {
@@ -89,8 +90,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                     public void onResponse(JSONObject jsonObject) {
                         Log.d(FragmentHome.class.getName(), jsonObject.toString());
                         try {
-                            if (UserService.login(jsonObject, "15850775808",
-                                    "12345678", Common.USER_TYPE_SHIPPER)) {
+                            if (UserService.login(jsonObject, "15715155071",
+                                    "11111111", Common.USER_TYPE_SHIPPER)) {
 //                                UserService.showUserInfo();
                             } else {
                                 Toast.makeText(context, UserService.getErrorMsg(jsonObject),
@@ -223,8 +224,11 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 break;
             case R.id.home_btn_order_truck:
                 Log.d(this.getClass().getName(), "order truck");
+                Intent intentPlaceOrder = new Intent(context, PlaceOrderActivity.class);
+                startActivity(intentPlaceOrder);
                 break;
-            default:
+            default
+                :
                 Log.d(this.getClass().getName(), "unknown button id");
                 break;
         }

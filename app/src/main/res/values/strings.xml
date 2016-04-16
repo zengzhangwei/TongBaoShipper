@@ -182,4 +182,9 @@
     <string name="feedback_input_error">请输入建议反馈信息！</string>
     <string name="feedback_success">反馈成功！</string>
 
+    <!--fragment order-->
+
+    <string name="title_order">订单</string>
+    <string name="title_place_order">下单</string>
+
 </resources>
