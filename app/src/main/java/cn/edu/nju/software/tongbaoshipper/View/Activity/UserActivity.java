@@ -292,6 +292,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(UserActivity.class.getName(), "pop cancel");
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
+                    popupWindow = null;
                 }
             }
         });

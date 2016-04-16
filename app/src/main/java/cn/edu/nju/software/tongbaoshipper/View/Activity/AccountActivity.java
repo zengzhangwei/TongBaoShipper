@@ -1,12 +1,25 @@
 package cn.edu.nju.software.tongbaoshipper.View.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +32,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.edu.nju.software.tongbaoshipper.Common.MonthlyAccount;
 import cn.edu.nju.software.tongbaoshipper.View.Adapter.AccountAdapter;
 import cn.edu.nju.software.tongbaoshipper.Common.Account;
 import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
@@ -34,11 +49,13 @@ import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView tvYear, tvMonth;
+    private static final int HANDLER_UI = 0;
+    private TextView tvYear, tvMonth, tvIncome, tvCost;
     private ListView lvAccount;
     private LinearLayout vEmpty;
     private AccountAdapter accountAdapter;
     private RequestQueue requestQueue;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +63,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_account);
 
         initViw();
+        requestQueue = Volley.newRequestQueue(this);
     }
 
     private void initViw() {
         tvYear = (TextView) findViewById(R.id.account_tv_year);
         tvMonth = (TextView) findViewById(R.id.account_tv_month);
+        tvIncome = (TextView) findViewById(R.id.account_tv_income);
+        tvCost = (TextView) findViewById(R.id.account_tv_cost);
         lvAccount = (ListView) findViewById(R.id.account_lv);
         LinearLayout btnBack = (LinearLayout) findViewById(R.id.account_btn_back);
         LinearLayout btnTime = (LinearLayout) findViewById(R.id.account_btn_time);
@@ -69,30 +89,143 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
-        tvYear.setText(String.format("%d%s", year, this.getResources().getString(R.string.year)));
-        tvMonth.setText(String.format("%02d%s", month, this.getResources().getString(R.string.month)));
+        showMonthlyAccount(year, month);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.account_btn_back:
+                Log.d(AccountActivity.class.getName(), "back");
+                finish();
+                break;
+            case R.id.account_btn_time:
+                Log.d(AccountActivity.class.getName(), "time");
+                showPopWindow();
+                break;
+            default:
+                Log.e(AccountActivity.class.getName(), "Unknown id");
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+                popupWindow = null;
+            } else {
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+            popupWindow = null;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    /**
+     * 显示底部选择时间菜单
+     */
+    private void showPopWindow() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            return;
+        }
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_account_month, null);
+
+        popupWindow = new PopupWindow(view,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setAnimationStyle(R.style.pop_window_anim);
+        popupWindow.showAtLocation(findViewById(R.id.activity_account), Gravity.BOTTOM, 0, 0);
+
+        // popupWindow调整屏幕亮度
+        final Window window = this.getWindow();
+        final WindowManager.LayoutParams params = this.getWindow().getAttributes();
+        params.alpha = 0.5f;
+        window.setAttributes(params);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                params.alpha = 1.0f;
+                window.setAttributes(params);
+            }
+        });
+
+        // TODO 调整datePicker样式
+        TextView tvCancel = (TextView) view.findViewById(R.id.account_month_tv_cancel);
+        TextView tvComplete = (TextView) view.findViewById(R.id.account_month_tv_complete);
+        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.account_month_dp);
+        if (datePicker != null) {
+            // datePicker date dismiss
+            ((ViewGroup) ((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(2).setVisibility(View.GONE);
+            datePicker.setMinDate(User.getInstance().getRegisterTime().getTime());
+        }
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(AccountActivity.class.getName(), "pop cancel");
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+            }
+        });
+        tvComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(AccountActivity.class.getName(), "pop complete");
+                assert datePicker != null;
+                int year = datePicker.getYear();
+                int month = datePicker.getMonth() + 1;
+                showMonthlyAccount(year, month);
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+            }
+        });
+    }
+
+    private void showMonthlyAccount(final int year, final int month) {
         // init account detail view
-        requestQueue = Volley.newRequestQueue(this);
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
-        Request<JSONObject> request = new PostRequest(Net.URL_USER_SHOW_ACCOUNT,
+        params.put("year", String.valueOf(year));
+        params.put("month", String.valueOf(month));
+        Request<JSONObject> request = new PostRequest(Net.URL_USER_GET_ACCOUNT_BY_MONTH,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         Log.d(AccountActivity.class.getName(), jsonObject.toString());
                         try {
                             if (UserService.getResult(jsonObject)) {
-                                // 初始化账单数据
-                                ArrayList<Account> arrAccount = UserService.showAccount(jsonObject);
-                                accountAdapter = new AccountAdapter(AccountActivity.this, arrAccount);
-                                lvAccount.setAdapter(accountAdapter);
-                                if (arrAccount.size() > 0) {
-                                    vEmpty.setVisibility(View.INVISIBLE);
-                                } else {
-                                    vEmpty.setVisibility(View.VISIBLE);
-                                    lvAccount.setEmptyView(vEmpty);
-                                }
+                                // thread update ui
+                                final MonthlyAccount monthlyAccount = UserService.getAccountByMonth(jsonObject, year, month);
+                                final UIHandler handler = new UIHandler(AccountActivity.this);
+                                Thread thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Log.d(AccountActivity.class.getName(), "thread ui");
+                                        Message msg = new Message();
+                                        msg.what = HANDLER_UI;
+                                        msg.obj = monthlyAccount;
+                                        handler.sendMessage(msg);
+                                    }
+                                });
+                                thread.start();
                             } else {
                                 Toast.makeText(AccountActivity.this, UserService.getErrorMsg(jsonObject),
                                         Toast.LENGTH_SHORT).show();
@@ -119,26 +252,43 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         requestQueue.add(request);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.account_btn_back:
-                Log.d(AccountActivity.class.getName(), "back");
-                finish();
-                break;
-            case R.id.account_btn_time:
-                Log.d(AccountActivity.class.getName(), "time");
-                showPopWindow();
-                break;
-            default:
-                Log.e(AccountActivity.class.getName(), "Unknown id");
+    static class UIHandler extends Handler {
+        WeakReference<AccountActivity> activity;
+
+        UIHandler(AccountActivity activity) {
+            this.activity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            AccountActivity accountActivity = activity.get();
+            switch (msg.what) {
+                case HANDLER_UI:
+                    // update account ui
+                    Log.d(AccountActivity.class.getName() + UIHandler.class.getName(), "handler ui");
+                    MonthlyAccount monthlyAccount = (MonthlyAccount) msg.obj;
+                    accountActivity.tvYear.setText(String.format("%d%s",
+                            monthlyAccount.getYear(), accountActivity.getResources().getString(R.string.year)));
+                    accountActivity.tvMonth.setText(String.format("%02d%s",
+                            monthlyAccount.getMonth(), accountActivity.getResources().getString(R.string.month)));
+                    accountActivity.tvIncome.setText(String.valueOf(monthlyAccount.getTotalIn()));
+                    accountActivity.tvCost.setText(String.valueOf(monthlyAccount.getTotalOut()));
+                    ArrayList<Account> arrAccount = monthlyAccount.getAccountList();
+                    accountActivity.accountAdapter = new AccountAdapter(accountActivity, arrAccount);
+                    accountActivity.lvAccount.setAdapter(accountActivity.accountAdapter);
+                    if (arrAccount.size() > 0) {
+                        accountActivity.vEmpty.setVisibility(View.INVISIBLE);
+                    } else {
+                        accountActivity.vEmpty.setVisibility(View.VISIBLE);
+                        accountActivity.lvAccount.setEmptyView(accountActivity.vEmpty);
+                    }
+                    break;
+                default:
+                    Log.e(AccountActivity.class.getName() + UIHandler.class.getName(), "Unknown handler what");
+                    break;
+            }
         }
     }
 
-    /**
-     * 显示底部选择时间菜单
-     */
-    private void showPopWindow() {
-
-    }
 }
