@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_account"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
@@ -108,7 +109,7 @@
                 android:gravity="center"
                 android:text="@string/account_income"
                 android:textColor="@color/font_gray"
-                android:textSize="10sp" />
+                android:textSize="@dimen/account_info_header_text_size" />
 
             <TextView
                 android:id="@+id/account_tv_income"
@@ -119,7 +120,7 @@
                 android:gravity="center"
                 android:text="@string/account_money"
                 android:textColor="@color/font_gray"
-                android:textSize="15sp" />
+                android:textSize="@dimen/common_text_size" />
         </LinearLayout>
 
         <ImageView
@@ -143,7 +144,7 @@
                 android:gravity="center"
                 android:text="@string/account_cost"
                 android:textColor="@color/font_gray"
-                android:textSize="10sp" />
+                android:textSize="@dimen/account_info_header_text_size" />
 
             <TextView
                 android:id="@+id/account_tv_cost"
@@ -154,7 +155,7 @@
                 android:gravity="center"
                 android:text="@string/account_money"
                 android:textColor="@color/font_gray"
-                android:textSize="15sp" />
+                android:textSize="@dimen/common_text_size" />
         </LinearLayout>
 
     </LinearLayout>
@@ -204,7 +205,7 @@
         android:divider="@color/lines_gray"
         android:dividerHeight="@dimen/common_line"
         android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true"></ListView>
+        android:headerDividersEnabled="true" />
 
     <LinearLayout
         android:id="@+id/account_empty"

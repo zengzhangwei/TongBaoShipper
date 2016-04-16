@@ -90,6 +90,7 @@
     <!--activity account-->
     <dimen name="account_info_height">72dp</dimen>
     <dimen name="account_info_padding">20dp</dimen>
+    <dimen name="account_info_header_text_size">10sp</dimen>
 
     <!--activity add address-->
     <dimen name="add_address_info_height">150dp</dimen>

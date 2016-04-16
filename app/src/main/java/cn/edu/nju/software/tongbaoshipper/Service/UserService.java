@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import cn.edu.nju.software.tongbaoshipper.Common.Account;
 import cn.edu.nju.software.tongbaoshipper.Common.Message;
+import cn.edu.nju.software.tongbaoshipper.Common.MonthlyAccount;
 import cn.edu.nju.software.tongbaoshipper.Common.User;
 import cn.edu.nju.software.tongbaoshipper.Const.Net;
 
@@ -279,6 +280,42 @@ public class UserService {
             }
         }
         return arrAccount;
+    }
+
+    /**
+     * 按月度查看账单
+     * @param jsonObject    response
+     * @return  MonthlyAccount
+     * @throws JSONException
+     */
+    public static MonthlyAccount getAccountByMonth(JSONObject jsonObject, int year, int month) throws JSONException {
+        MonthlyAccount monthlyAccount = new MonthlyAccount();
+        if (getResult(jsonObject)) {
+            JSONObject data = jsonObject.getJSONObject("data");
+            monthlyAccount.setYear(year);
+            monthlyAccount.setMonth(month);
+            monthlyAccount.setTotalIn(data.getDouble("totalIn"));
+            monthlyAccount.setTotalOut(data.getDouble("totalOut"));
+            JSONArray accountList = data.getJSONArray("accountList");
+            ArrayList<Account> arrAccount = new ArrayList<>();
+            for (int i = 0; i < accountList.length(); i++) {
+                JSONObject object = accountList.getJSONObject(i);
+                Account account = new Account();
+                account.setId(object.getInt("id"));
+                account.setType(object.getInt("type"));
+                account.setMoney(object.getDouble("money"));
+                try {
+                    account.setBuildTime(sdf.parse(object.getString("time")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                account.setOrder_id(object.getJSONObject("order").getInt("id"));
+                arrAccount.add(account);
+            }
+            monthlyAccount.setAccountList(arrAccount);
+            return monthlyAccount;
+        }
+        return monthlyAccount;
     }
 
     public static boolean getAllTruckTypes(JSONObject jsonObject) {
