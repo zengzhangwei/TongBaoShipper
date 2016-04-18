@@ -55,12 +55,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                     messageAdapter = new MessageAdapter(MessageActivity.this, arrMessage, lvMessage);
                                     lvMessage.setAdapter(messageAdapter);
                                     // set empty view
-                                    if (arrMessage.size() != 0) {
-                                        vEmpty.setVisibility(View.INVISIBLE);
-                                    } else {
-                                        vEmpty.setVisibility(View.VISIBLE);
-                                        lvMessage.setEmptyView(vEmpty);
-                                    }
+                                    lvMessage.setEmptyView(vEmpty);
                                     // set message hasRead
                                     for (Message message : arrMessage) {
                                         if (!message.isHasRead()) {

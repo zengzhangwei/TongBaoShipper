@@ -23,7 +23,7 @@ public class Account {
     /**
      * 账单对应的订单（可选）
      */
-    private int order_id = 0;
+    private int orderId = 0;
     /**
      * 充值
      */
@@ -77,11 +77,11 @@ public class Account {
         this.buildTime = buildTime;
     }
 
-    public int getOrder_id() {
-        return order_id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 }

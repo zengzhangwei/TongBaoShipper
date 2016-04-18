@@ -50,11 +50,11 @@ import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int HANDLER_UI = 0;
+    private int year, month;
     private TextView tvYear, tvMonth, tvIncome, tvCost;
     private ListView lvAccount;
     private LinearLayout vEmpty;
     private AccountAdapter accountAdapter;
-    private RequestQueue requestQueue;
     private PopupWindow popupWindow;
 
     @Override
@@ -63,7 +63,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_account);
 
         initViw();
-        requestQueue = Volley.newRequestQueue(this);
     }
 
     private void initViw() {
@@ -87,9 +86,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         // 设置默认账单时间
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        showMonthlyAccount(year, month);
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        showMonthlyAccount();
     }
 
     @Override
@@ -172,6 +171,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             // datePicker date dismiss
             ((ViewGroup) ((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(2).setVisibility(View.GONE);
             datePicker.setMinDate(User.getInstance().getRegisterTime().getTime());
+            datePicker.init(year, month, 1, new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    Log.d(AccountActivity.class.getName(),
+                            String.format("date changed: year-%d month-%d", year, monthOfYear));
+                    AccountActivity.this.year = year;
+                    AccountActivity.this.month = monthOfYear;
+                }
+            });
         }
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,10 +195,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 Log.d(AccountActivity.class.getName(), "pop complete");
-                assert datePicker != null;
-                int year = datePicker.getYear();
-                int month = datePicker.getMonth() + 1;
-                showMonthlyAccount(year, month);
+                showMonthlyAccount();
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                     popupWindow = null;
@@ -199,12 +204,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void showMonthlyAccount(final int year, final int month) {
-        // init account detail view
+    /**
+     * show monthly account
+     * (for month + 1: the default DatePicker monthOfYear starts from 0)
+     */
+    private void showMonthlyAccount() {
+        RequestQueue requestQueue = Volley.newRequestQueue(AccountActivity.this);
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
         params.put("year", String.valueOf(year));
-        params.put("month", String.valueOf(month));
+        params.put("month", String.valueOf(month + 1));
         Request<JSONObject> request = new PostRequest(Net.URL_USER_GET_ACCOUNT_BY_MONTH,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -213,7 +222,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         try {
                             if (UserService.getResult(jsonObject)) {
                                 // thread update ui
-                                final MonthlyAccount monthlyAccount = UserService.getAccountByMonth(jsonObject, year, month);
+                                final MonthlyAccount monthlyAccount = UserService.getAccountByMonth(jsonObject, year, month + 1);
                                 final UIHandler handler = new UIHandler(AccountActivity.this);
                                 Thread thread = new Thread(new Runnable() {
                                     @Override
@@ -277,12 +286,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     ArrayList<Account> arrAccount = monthlyAccount.getAccountList();
                     accountActivity.accountAdapter = new AccountAdapter(accountActivity, arrAccount);
                     accountActivity.lvAccount.setAdapter(accountActivity.accountAdapter);
-                    if (arrAccount.size() > 0) {
-                        accountActivity.vEmpty.setVisibility(View.INVISIBLE);
-                    } else {
-                        accountActivity.vEmpty.setVisibility(View.VISIBLE);
-                        accountActivity.lvAccount.setEmptyView(accountActivity.vEmpty);
-                    }
+                    accountActivity.lvAccount.setEmptyView(accountActivity.vEmpty);
                     break;
                 default:
                     Log.e(AccountActivity.class.getName() + UIHandler.class.getName(), "Unknown handler what");

@@ -22,7 +22,8 @@ public class UserService {
 
     /**
      * 获取错误信息
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return String
      * @throws JSONException
      */
@@ -32,7 +33,8 @@ public class UserService {
 
     /**
      * 获取请求处理结果
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return boolean
      * @throws JSONException
      */
@@ -45,7 +47,7 @@ public class UserService {
      * for test
      */
     public static void showUserInfo() {
-        // TODO just for test
+        // just for test
         System.out.println("id:" + User.getInstance().getId());
         System.out.println("nickName:" + User.getInstance().getNiceName());
         System.out.println("phoneNum:" + User.getInstance().getPhoneNum());
@@ -60,9 +62,10 @@ public class UserService {
 
     /**
      * 用户登陆
-     * @param jsonObject    response
-     * @param phoneNum      phoneNum
-     * @param password      password
+     *
+     * @param jsonObject response
+     * @param phoneNum   phoneNum
+     * @param password   password
      * @return boolean
      * @throws JSONException
      */
@@ -92,7 +95,8 @@ public class UserService {
 
     /**
      * 判断手机号是否已注册
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return boolean
      * @throws JSONException
      */
@@ -102,7 +106,8 @@ public class UserService {
 
     /**
      * 手机号注册
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return boolean
      * @throws JSONException
      */
@@ -112,7 +117,8 @@ public class UserService {
 
     /**
      * 上传图片
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return iconUrl
      * @throws JSONException
      */
@@ -127,8 +133,9 @@ public class UserService {
 
     /**
      * 修改用户昵称
-     * @param jsonObject    response
-     * @param newNickName   nickName
+     *
+     * @param jsonObject  response
+     * @param newNickName nickName
      * @return boolean
      * @throws JSONException
      */
@@ -142,8 +149,9 @@ public class UserService {
 
     /**
      * 修改密码
-     * @param jsonObject    response
-     * @param newPassword   password
+     *
+     * @param jsonObject  response
+     * @param newPassword password
      * @return boolean
      * @throws JSONException
      */
@@ -157,8 +165,9 @@ public class UserService {
 
     /**
      * 修改个人头像
-     * @param jsonObject    response
-     * @param iconUrl       icon
+     *
+     * @param jsonObject response
+     * @param iconUrl    icon
      * @return boolean
      * @throws JSONException
      */
@@ -181,7 +190,8 @@ public class UserService {
 
     /**
      * 获取我的消息列表
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return ArrayList<Message></>
      * @throws JSONException
      */
@@ -226,7 +236,8 @@ public class UserService {
 
     /**
      * 读消息
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return bolean
      * @throws JSONException
      */
@@ -236,7 +247,8 @@ public class UserService {
 
     /**
      * 删除消息
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return boolean
      * @throws JSONException
      */
@@ -246,7 +258,8 @@ public class UserService {
 
     /**
      * 发表反馈
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return boolean
      * @throws JSONException
      */
@@ -256,7 +269,8 @@ public class UserService {
 
     /**
      * 查看账单
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return boolean
      * @throws JSONException
      */
@@ -275,7 +289,7 @@ public class UserService {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                account.setOrder_id(object.getJSONObject("order").getInt("id"));
+                account.setOrderId(object.getJSONObject("order").getInt("id"));
                 arrAccount.add(account);
             }
         }
@@ -284,8 +298,9 @@ public class UserService {
 
     /**
      * 按月度查看账单
-     * @param jsonObject    response
-     * @return  MonthlyAccount
+     *
+     * @param jsonObject response
+     * @return MonthlyAccount
      * @throws JSONException
      */
     public static MonthlyAccount getAccountByMonth(JSONObject jsonObject, int year, int month) throws JSONException {
@@ -309,7 +324,7 @@ public class UserService {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                account.setOrder_id(object.getJSONObject("order").getInt("id"));
+                account.setOrderId(object.getInt("orderId"));
                 arrAccount.add(account);
             }
             monthlyAccount.setAccountList(arrAccount);
@@ -324,8 +339,9 @@ public class UserService {
 
     /**
      * 充值
-     * @param jsonObject    response
-     * @param amount        money
+     *
+     * @param jsonObject response
+     * @param amount     money
      * @return boolean
      * @throws JSONException
      */
@@ -340,8 +356,9 @@ public class UserService {
 
     /**
      * 提现
-     * @param jsonObject    response
-     * @param amount        money
+     *
+     * @param jsonObject response
+     * @param amount     money
      * @return boolean
      * @throws JSONException
      */
@@ -360,7 +377,8 @@ public class UserService {
 
     /**
      * 获取用户当前余额
-     * @param jsonObject    response
+     *
+     * @param jsonObject response
      * @return boolean
      * @throws JSONException
      */

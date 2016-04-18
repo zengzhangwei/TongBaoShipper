@@ -160,11 +160,16 @@
     <string name="driver_empty">您还没有常用司机…</string>
 
     <!--item driver-->
+    <string name="item_driver_add_success">添加常用司机成功！</string>
     <string name="item_driver_delete_success">删除常用司机成功！</string>
 
     <!--dialog item driver-->
     <string name="dialog_item_driver_delete">删除常用司机</string>
 
+    <!--add driver activity-->
+    <string name="title_add_driver">添加常用司机</string>
+    <string name="add_driver_hint">请输入司机手机号</string>
+    <string name="add_driver_empty">未找到匹配司机…</string>
     <!--activity message-->
     <string name="title_message">消息</string>
     <string name="message_empty">暂时没有消息！</string>
@@ -183,7 +188,6 @@
     <string name="feedback_success">反馈成功！</string>
 
     <!--fragment order-->
-
     <string name="title_order">订单</string>
     <string name="title_place_order">下单</string>
 
