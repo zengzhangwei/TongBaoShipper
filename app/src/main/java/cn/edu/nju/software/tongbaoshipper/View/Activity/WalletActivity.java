@@ -32,7 +32,7 @@ import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 
-public class WalletActivity extends AppCompatActivity implements View.OnClickListener{
+public class WalletActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tvMoney;
     private ListView lvAccount;
@@ -62,12 +62,7 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
                                     ArrayList<Account> arrAccount = UserService.showAccount(jsonObject);
                                     accountAdapter = new AccountAdapter(WalletActivity.this, arrAccount);
                                     lvAccount.setAdapter(accountAdapter);
-                                    if (arrAccount.size() > 0) {
-                                        vEmpty.setVisibility(View.INVISIBLE);
-                                    } else {
-                                        vEmpty.setVisibility(View.VISIBLE);
-                                        lvAccount.setEmptyView(vEmpty);
-                                    }
+                                    lvAccount.setEmptyView(vEmpty);
                                 } else {
                                     Toast.makeText(WalletActivity.this, UserService.getErrorMsg(jsonObject),
                                             Toast.LENGTH_SHORT).show();

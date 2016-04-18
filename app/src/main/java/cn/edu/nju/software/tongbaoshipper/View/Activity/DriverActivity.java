@@ -31,7 +31,7 @@ import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.Service.ShipperService;
 
-public class DriverActivity extends AppCompatActivity implements View.OnClickListener{
+public class DriverActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout vEmpty;
     private ArrayList<Driver> arrDriver;
@@ -53,14 +53,10 @@ public class DriverActivity extends AppCompatActivity implements View.OnClickLis
                             try {
                                 if (ShipperService.getResult(jsonObject)) {
                                     arrDriver = ShipperService.getFrequentDrivers(jsonObject);
-                                    driverAdapter = new DriverAdapter(DriverActivity.this, arrDriver, lvDriver);
+                                    driverAdapter = new DriverAdapter(DriverActivity.this,
+                                            arrDriver, lvDriver, DriverAdapter.OperationType.dial);
                                     lvDriver.setAdapter(driverAdapter);
-                                    if (arrDriver.size() > 0) {
-                                        vEmpty.setVisibility(View.INVISIBLE);
-                                    } else {
-                                        vEmpty.setVisibility(View.VISIBLE);
-                                        lvDriver.setEmptyView(vEmpty);
-                                    }
+                                    lvDriver.setEmptyView(vEmpty);
                                 } else {
                                     Toast.makeText(DriverActivity.this, ShipperService.getErrorMsg(jsonObject),
                                             Toast.LENGTH_SHORT).show();
@@ -122,6 +118,8 @@ public class DriverActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.driver_title_tv_add:
                 Log.d(DriverActivity.class.getName(), "add");
+                Intent intent = new Intent(DriverActivity.this, AddDriverActivity.class);
+                startActivity(intent);
                 break;
             default:
                 Log.e(DriverActivity.class.getName(), "Unknown id");

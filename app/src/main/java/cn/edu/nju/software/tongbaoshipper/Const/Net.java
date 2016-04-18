@@ -113,7 +113,7 @@ public class Net {
     /**
      * 根据手机号搜索司机（可以是模糊搜索）
      */
-    public static final String URL_SHIPPER_SEARCH_DRIVER = URL_PREFIX + "/shipper/auth/search_driver";
+    public static final String URL_SHIPPER_SEARCH_DRIVER = URL_PREFIX + "/shipper/auth/searchDriver";
     /**
      * 添加常用地址
      */

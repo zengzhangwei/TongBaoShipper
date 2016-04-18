@@ -325,7 +325,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(UserActivity.class.getName(), String.format("camera: %d", resultCode));
                 if (resultCode == RESULT_OK) {
                     File avatar = new File(Environment.getExternalStorageDirectory(), USER_PHOTO_NAME);
-                    System.out.println(avatar.getAbsolutePath());
+//                    System.out.println(avatar.getAbsolutePath());
                     // 裁剪图片
                     cropPhoto(Uri.fromFile(avatar));
                 }

@@ -57,12 +57,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                                     arrAddress = ShipperService.getFrequentAddresses(jsonObject);
                                     addressAdapter = new AddressAdapter(AddressActivity.this, arrAddress, lvAddress);
                                     lvAddress.setAdapter(addressAdapter);
-                                    if (arrAddress.size() > 0) {
-                                        vEmpty.setVisibility(View.INVISIBLE);
-                                    } else {
-                                        lvAddress.setEmptyView(vEmpty);
-                                        vEmpty.setVisibility(View.VISIBLE);
-                                    }
+                                    lvAddress.setEmptyView(vEmpty);
                                 } else {
                                     Toast.makeText(AddressActivity.this, UserService.getErrorMsg(jsonObject),
                                             Toast.LENGTH_SHORT).show();
@@ -108,7 +103,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     private void initView() {
         TextView tvAdd = (TextView) findViewById(R.id.address_title_tv_add);
         LinearLayout btnBack = (LinearLayout) findViewById(R.id.address_btn_back);
-        lvAddress  = (ListView) findViewById(R.id.address_lv);
+        lvAddress = (ListView) findViewById(R.id.address_lv);
         vEmpty = (LinearLayout) findViewById(R.id.address_empty);
 
         tvAdd.setOnClickListener(this);

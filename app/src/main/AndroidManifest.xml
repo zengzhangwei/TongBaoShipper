@@ -57,7 +57,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".View.Activity.AccountActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".View.Activity.SettingActivity"
             android:screenOrientation="portrait" />
@@ -88,6 +88,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".View.Activity.DriverActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".View.Activity.AddDriverActivity"
             android:screenOrientation="portrait" />
     </application>
 
