@@ -77,12 +77,11 @@ public class ShipperService {
             JSONArray data = jsonObject.getJSONArray("data");
             for (int i = 0; i < data.length(); i++) {
                 Address address = new Address();
-                //TODO complete
                 JSONObject object = data.getJSONObject(i);
                 address.setId(object.getInt("id"));
                 address.setAddressName(object.getString("name"));
-                address.setContactName(object.getString("contact"));
-                address.setPhoneNum(object.getString("phoneNum"));
+                address.setContactName(object.getString("contactName"));
+                address.setPhoneNum(object.getString("contactPhone"));
                 address.setLat(object.getDouble("lat"));
                 address.setLng(object.getDouble("lng"));
                 arrAddress.add(address);

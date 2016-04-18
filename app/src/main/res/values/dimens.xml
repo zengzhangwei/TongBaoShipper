@@ -94,6 +94,7 @@
 
     <!--activity add address-->
     <dimen name="add_address_info_height">150dp</dimen>
+    <dimen name="add_address_info_single_height">50dp</dimen>
     <dimen name="add_address_iv_width">50dp</dimen>
     <dimen name="add_address_iv_padding">12dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

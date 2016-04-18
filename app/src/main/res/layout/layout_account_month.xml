@@ -38,7 +38,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/background_gray"
         android:gravity="center">
 
         <DatePicker
@@ -48,8 +48,6 @@
             android:calendarViewShown="false"
             android:clickable="false"
             android:datePickerMode="spinner"
-            android:headerYearTextAppearance="@color/font_black"
-            android:headerMonthTextAppearance="@color/font_black"
             android:descendantFocusability="blocksDescendants"
             android:spinnersShown="true" />
     </LinearLayout>

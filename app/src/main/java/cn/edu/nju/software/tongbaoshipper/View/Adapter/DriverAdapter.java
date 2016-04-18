@@ -29,8 +29,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,27 +44,23 @@ import cn.edu.nju.software.tongbaoshipper.Service.ShipperService;
 
 public class DriverAdapter extends BaseAdapter implements AdapterView.OnItemLongClickListener {
 
-    /**
-     * add driver
-     */
-    public static final int OPERATION_TYPE_ADD_DRIVER = 0;
-    /**
-     * dial driver
-     */
-    public static final int OPERATION_TYPE_DIAL_DRIVER = 1;
-    private int operationType;
+    private Enum operationType;
     private Context context;
     private ArrayList<Driver> arrDriver;
     private Dialog dialog;
     private RequestQueue requestQueue;
+    public enum OperationType {
+        add,
+        dial
+    }
 
-    public DriverAdapter(Context context, ArrayList<Driver> arrDriver, ListView lvDriver, int operationType) {
+    public DriverAdapter(Context context, ArrayList<Driver> arrDriver, ListView lvDriver, Enum operationType) {
         super();
         this.operationType = operationType;
         this.context = context;
         this.arrDriver = arrDriver;
         // user frequent driver can delete
-        if (this.operationType == OPERATION_TYPE_DIAL_DRIVER) {
+        if (this.operationType == OperationType.dial) {
             lvDriver.setOnItemLongClickListener(this);
         }
         requestQueue = Volley.newRequestQueue(context);
@@ -140,67 +134,66 @@ public class DriverAdapter extends BaseAdapter implements AdapterView.OnItemLong
      * @param driver Driver
      */
     private void setOperationImage(ImageView iv, final Driver driver) {
-        switch (operationType) {
-            case OPERATION_TYPE_ADD_DRIVER:
-                iv.setImageResource(R.drawable.driver_add);
-                iv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(DriverAdapter.class.getName(), "add driver");
-                        Map<String, String> params = new HashMap<>();
-                        params.put("token", User.getInstance().getToken());
-                        params.put("id", String.valueOf(driver.getId()));
-                        Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_ADD_FREQUENT_DRIVER,
-                                new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject jsonObject) {
-                                        Log.d(DriverAdapter.class.getName(), jsonObject.toString());
-                                        try {
-                                            if (ShipperService.addFrequentDriver(jsonObject)) {
-                                                Toast.makeText(context, context.getResources().getString(R.string.item_driver_add_success),
-                                                        Toast.LENGTH_SHORT).show();
-                                                ((Activity) context).finish();
-                                            } else {
-                                                Toast.makeText(context, ShipperService.getErrorMsg(jsonObject),
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+        if (operationType.equals(OperationType.add)) {
+            iv.setImageResource(R.drawable.driver_add);
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(DriverAdapter.class.getName(), "add driver");
+                    Map<String, String> params = new HashMap<>();
+                    params.put("token", User.getInstance().getToken());
+                    params.put("id", String.valueOf(driver.getId()));
+                    Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_ADD_FREQUENT_DRIVER,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject jsonObject) {
+                                    Log.d(DriverAdapter.class.getName(), jsonObject.toString());
+                                    try {
+                                        if (ShipperService.addFrequentDriver(jsonObject)) {
+                                            Toast.makeText(context, context.getResources().getString(R.string.item_driver_add_success),
+                                                    Toast.LENGTH_SHORT).show();
+                                            ((Activity) context).finish();
+                                        } else {
+                                            Toast.makeText(context, ShipperService.getErrorMsg(jsonObject),
+                                                    Toast.LENGTH_SHORT).show();
                                         }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError volleyError) {
-                                        Log.e(DriverAdapter.class.getName(), volleyError.getMessage(), volleyError);
-                                        //http authentication 401
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    Log.e(DriverAdapter.class.getName(), volleyError.getMessage(), volleyError);
+                                    //http authentication 401
 //                                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
 //                                            Intent intent = new Intent(UserActivity.this, LoginActivity.class);
 //                                            startActivity(intent);
 //                                            return;
 //                                        }
-                                        Toast.makeText(context, context.getResources().getString(R.string.network_error),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }, params);
-                        requestQueue.add(request);
-                    }
-                });
-                break;
-            case OPERATION_TYPE_DIAL_DRIVER:
-                iv.setImageResource(R.drawable.dial);
-                iv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(DriverAdapter.class.getName(), "dial driver");
-                        Uri telUri = Uri.parse("tel:" + driver.getPhoneNum());
-                        Intent intent = new Intent(Intent.ACTION_DIAL, telUri);
-                        context.startActivity(intent);
-                    }
-                });
-                break;
-            default:
-                Log.e(DriverAdapter.class.getName(), "Unknown operation type");
+                                    Toast.makeText(context, context.getResources().getString(R.string.network_error),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }, params);
+                    requestQueue.add(request);
+                }
+            });
+
+        } else if (operationType.equals(OperationType.dial)) {
+            iv.setImageResource(R.drawable.dial);
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(DriverAdapter.class.getName(), "dial driver");
+                    Uri telUri = Uri.parse("tel:" + driver.getPhoneNum());
+                    Intent intent = new Intent(Intent.ACTION_DIAL, telUri);
+                    context.startActivity(intent);
+                }
+            });
+
+        } else {
+            Log.e(DriverAdapter.class.getName(), "Unknown operation type");
         }
     }
 
