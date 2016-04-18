@@ -55,9 +55,9 @@
     <dimen name="my_line_margin_left">72dp</dimen>
 
     <!--fragment home-->
-    <dimen name="fragment_home_banner_height">81dp</dimen>
-    <dimen name="fragment_home_btn_text_size">15sp</dimen>
-    <dimen name="fragment_home_order_truck_text_size">21sp</dimen>
+    <dimen name="fragment_home_banner_height">102dp</dimen>
+    <dimen name="fragment_home_btn_text_size">13sp</dimen>
+    <dimen name="fragment_home_order_truck_text_size">18sp</dimen>
 
     <!--activity login/register/change password-->
     <dimen name="login_margin">20dp</dimen>

@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+        <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -31,7 +31,10 @@
     <!--fragment home-->
     <style name="fragment_home_btn">
         <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/common_small</item>
+        <item name="android:paddingTop">@dimen/common_large</item>
+        <item name="android:paddingBottom">@dimen/common_large</item>
+        <item name="android:paddingRight">@dimen/common_padding</item>
+        <item name="android:paddingLeft">@dimen/common_padding</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:drawablePadding">@dimen/common_tiny</item>
         <item name="android:textSize">@dimen/fragment_home_btn_text_size</item>

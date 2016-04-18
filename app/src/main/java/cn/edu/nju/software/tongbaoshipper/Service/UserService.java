@@ -199,37 +199,21 @@ public class UserService {
         ArrayList<Message> arrMessage = new ArrayList<>();
         if (getResult(jsonObject)) {
             JSONArray data = jsonObject.getJSONArray("data");
-//            for (int i = data.length() - 1; i >= 0; i--) {
-//                Message message = new Message();
-//                JSONObject object = data.getJSONObject(i);
-//                message.setId(object.getInt("id"));
-//                message.setType(object.getInt("type"));
-//                message.setContent(object.getString("content"));
-//                try {
-//                    message.setTime(sdf.parse(object.getString("time")));
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                message.setHasRead(object.getBoolean("hasRead"));
-//                message.setOrderID(object.getInt("objectId"));
-//                arrMessage.add(message);
-//            }
-            Message message = new Message();
-            message.setId(1);
-            message.setOrderID(1);
-            message.setType(1);
-            message.setContent("test test etsteettetetet");
-            message.setTime(new Date());
-            message.setHasRead(true);
-            arrMessage.add(message);
-            arrMessage.add(message);
-            arrMessage.add(message);
-            arrMessage.add(message);
-            arrMessage.add(message);
-            arrMessage.add(message);
-            arrMessage.add(message);
-            arrMessage.add(message);
-
+            for (int i = data.length() - 1; i >= 0; i--) {
+                Message message = new Message();
+                JSONObject object = data.getJSONObject(i);
+                message.setId(object.getInt("id"));
+                message.setType(object.getInt("type"));
+                message.setContent(object.getString("content"));
+                try {
+                    message.setTime(sdf.parse(object.getString("time")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                message.setHasRead(object.getBoolean("hasRead"));
+                message.setOrderID(object.getInt("objectId"));
+                arrMessage.add(message);
+            }
         }
         return arrMessage;
     }
