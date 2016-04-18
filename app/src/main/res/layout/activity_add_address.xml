@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_white"
+    android:background="@color/background"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".View.Activity.AddAddressActivity">
 
     <RelativeLayout
@@ -64,11 +66,13 @@
                 style="@style/common_font_hint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/common_margin"
                 android:layout_toEndOf="@+id/add_address_iv_location"
                 android:layout_toRightOf="@+id/add_address_iv_location"
                 android:background="@null"
                 android:hint="@string/add_address_hint_location"
-                android:inputType="text" />
+                android:inputType="text"
+                android:selectAllOnFocus="true" />
         </RelativeLayout>
 
         <View
@@ -96,11 +100,13 @@
                 style="@style/common_font_hint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/common_margin"
                 android:layout_toEndOf="@+id/add_address_iv_contact"
                 android:layout_toRightOf="@+id/add_address_iv_contact"
                 android:background="@null"
                 android:hint="@string/add_address_hint_contact"
-                android:inputType="text" />
+                android:inputType="text"
+                android:selectAllOnFocus="true" />
         </RelativeLayout>
 
         <View
@@ -128,11 +134,13 @@
                 style="@style/common_font_hint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/common_margin"
                 android:layout_toEndOf="@+id/add_address_iv_phone"
                 android:layout_toRightOf="@+id/add_address_iv_phone"
                 android:background="@null"
                 android:hint="@string/add_address_hint_phone"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:selectAllOnFocus="true" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -153,5 +161,18 @@
             android:layout_height="wrap_content"
             android:text="@string/confirm" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/add_address_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/add_address_info"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginTop="@dimen/add_address_info_single_height"
+        android:background="@color/background_white"
+        android:divider="@color/lines_gray"
+        android:dividerHeight="@dimen/common_line"
+        android:visibility="invisible" />
 
 </RelativeLayout>

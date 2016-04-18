@@ -6,6 +6,10 @@ public class Common {
      */
     public static final String BAIDU_LBSAPI_KEY = "pcNttBggMqTY2w9FSZOgSzcaqe9CojTi";
     /**
+     * POI search page capacity
+     */
+    public static final int POI_SEARCH_PAGE_CAPACITY = 15;
+    /**
      * 用户类型 货主
      */
     public static final int USER_TYPE_SHIPPER = 0;

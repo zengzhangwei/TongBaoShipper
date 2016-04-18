@@ -149,6 +149,7 @@
     <string name="add_address_hint_location">请输入小区、大厦、街道或商铺的关键词</string>
     <string name="add_address_hint_contact">请输入联系人姓名（可不填）</string>
     <string name="add_address_hint_phone">请输入联系人电话</string>
+    <string name="add_address_info_less">请输入常用地址信息！</string>
     <string name="add_address_success">添加常用地址成功！</string>
 
     <!--activity change address-->
