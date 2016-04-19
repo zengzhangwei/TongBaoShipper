@@ -71,6 +71,14 @@ public class Net {
      */
     public static final String URL_USER_ADD_FEEDBACK = URL_PREFIX + "/user/addFeedback";
     /**
+     * 获取首页轮播图片
+     */
+    public static final String URL_USER_GET_BANNER_INFO = URL_PREFIX + "/user/getBannerInfo";
+    /**
+     * 判断某个token是否有效
+     */
+    public static final String URL_USER_TOKEN_VALID = URL_PREFIX + "/user/tokenValid";
+    /**
      * 查看账单
      */
     public static final String URL_USER_SHOW_ACCOUNT = URL_PREFIX + "/user/auth/showAccount";

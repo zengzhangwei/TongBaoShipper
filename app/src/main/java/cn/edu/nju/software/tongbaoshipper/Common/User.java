@@ -2,9 +2,10 @@ package cn.edu.nju.software.tongbaoshipper.Common;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
 
     /**
      * 用户实例
@@ -57,6 +58,7 @@ public class User {
 
     /**
      * 获取登陆用户实例
+     *
      * @return User
      */
     public static User getInstance() {
@@ -65,6 +67,7 @@ public class User {
 
     /**
      * 查看用户是否登陆
+     *
      * @return boolean
      */
     public static boolean isLogin() {
@@ -73,7 +76,8 @@ public class User {
 
     /**
      * 用户登陆
-     * @param loginUser
+     *
+     * @param loginUser User
      */
     public static void login(User loginUser) {
         user = loginUser;
@@ -81,7 +85,6 @@ public class User {
 
     /**
      * 用户注销
-     * @return
      */
     public static void logout() {
         user = new User();
@@ -174,4 +177,5 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
+
 }

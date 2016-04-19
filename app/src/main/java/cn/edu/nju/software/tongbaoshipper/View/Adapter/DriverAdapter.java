@@ -107,6 +107,9 @@ public class DriverAdapter extends BaseAdapter implements AdapterView.OnItemLong
      * @param driver Driver
      */
     private void setDriverIcon(final ImageView iv, Driver driver) {
+        if (driver.getIconUrl() == null) {
+            return;
+        }
         ImageRequest request = new ImageRequest(driver.getIconUrl(),
                 new Response.Listener<Bitmap>() {
                     @Override

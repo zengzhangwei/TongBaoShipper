@@ -23,8 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.Common.User;
 import cn.edu.nju.software.tongbaoshipper.Const.Common;
 import cn.edu.nju.software.tongbaoshipper.Const.Net;
+import cn.edu.nju.software.tongbaoshipper.Const.Prefs;
 import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 
@@ -32,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText etPhone, etPassword;
     private TextView tvLoginError;
-    private LinearLayout btnBack, btnLogin, btnRegister;
+    protected LinearLayout btnRegister;
     private RequestQueue requestQueue;
 
 
@@ -52,8 +54,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         etPhone = (EditText) findViewById(R.id.login_et_phone);
         etPassword = (EditText) findViewById(R.id.login_et_password);
         tvLoginError = (TextView) findViewById(R.id.login_tv_error);
-        btnBack = (LinearLayout) findViewById(R.id.login_btn_back);
-        btnLogin = (LinearLayout) findViewById(R.id.login_btn);
+        LinearLayout btnBack = (LinearLayout) findViewById(R.id.login_btn_back);
+        LinearLayout btnLogin = (LinearLayout) findViewById(R.id.login_btn);
         btnRegister = (LinearLayout) findViewById(R.id.login_btn_register);
 
         // 添加监听事件
@@ -84,7 +86,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 try {
                                     if (UserService.login(jsonObject, etPhone.getText().toString(),
                                             etPassword.getText().toString(), Common.USER_TYPE_SHIPPER)) {
-//                                        UserService.showUserInfo();
+                                        // local record user message
+                                        UserService.saveObject(LoginActivity.this, Prefs.PREF_KEY_USER, User.getInstance());
                                         finish();
                                     } else {
                                         Toast.makeText(LoginActivity.this, UserService.getErrorMsg(jsonObject),

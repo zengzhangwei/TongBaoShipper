@@ -21,8 +21,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.Common.User;
+import cn.edu.nju.software.tongbaoshipper.Const.Net;
+import cn.edu.nju.software.tongbaoshipper.Const.Prefs;
 import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentHome;
 import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentMy;
 import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentNearBy;
@@ -30,9 +48,10 @@ import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentOrder;
 
 public class FrameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    // 监听返回按键
-    private static long exitTime = 0;
-
+    /**
+     * is start app(load user message)
+     */
+    private static boolean IS_START_APP = true;
     private LinearLayout btnHome, btnNearby, btnOrder, btnMy;
     private ImageView ivHome, ivNearby, ivOrder, ivMy;
     private TextView tvHome, tvNearby, tvOrder, tvMy;
@@ -40,6 +59,51 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
     private FragmentTransaction ft;
     // fragment my contact PopupWindow
     private PopupWindow popupWindow;
+    private RequestQueue requestQueue;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (IS_START_APP) {
+            IS_START_APP = false;
+            final User user = (User) UserService.getObject(FrameActivity.this, Prefs.PREF_KEY_USER);
+            // check user token whether timeout
+            if (user != null) {
+                Log.d(FrameActivity.class.getName(), "valid token whether timeout");
+                Map<String, String> params = new HashMap<>();
+                params.put("token", user.getToken());
+                Request<JSONObject> request = new PostRequest(Net.URL_USER_TOKEN_VALID,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                Log.d(FrameActivity.class.getName(), jsonObject.toString());
+                                try {
+                                    if (UserService.getResult(jsonObject)) {
+                                        // register user
+                                        User.login(user);
+                                        UserService.showUserInfo();
+                                    } else {
+                                        UserService.tokenInvalid(FrameActivity.this, true);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.e(FrameActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                Toast.makeText(FrameActivity.this, FrameActivity.this.getResources().getString(R.string.network_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }, params);
+                requestQueue.add(request);
+            } else {
+                UserService.tokenInvalid(FrameActivity.this, false);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +111,7 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_frame);
         initView();
+        requestQueue = Volley.newRequestQueue(FrameActivity.this);
     }
 
     /**

@@ -14,34 +14,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.AddressActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.DriverActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.MapActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.MessageActivity;
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Const.Common;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
-import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.PlaceOrderActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.WalletActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Adapter.BannerPagerAdapter;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 
 import static cn.edu.nju.software.tongbaoshipper.R.id.home_btn_help;
 
@@ -50,7 +34,6 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     private Context context;
     private List<View> ivList;
     private int[] ivIdList = {R.drawable.top_banner_android, R.drawable.shadow_article, R.drawable.avatar};
-
     private LinearLayout layoutDot;
     private ViewPager vpBanner;
 
@@ -69,7 +52,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = View.inflate(context, R.layout.fragment_home, null);
         // 初始化视图
         initView(view);
@@ -77,48 +60,13 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         initBannerData(view);
         // 初始化banner事件
         initBannerAction();
-
-        // 自动登陆
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        Map<String, String> params = new HashMap<>();
-        params.put("phoneNumber", "15715155071");
-        params.put("password", "11111111");
-        params.put("type", String.valueOf(Common.USER_TYPE_SHIPPER));
-        Request<JSONObject> request = new PostRequest(Net.URL_USER_LOGIN,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        Log.d(FragmentHome.class.getName(), jsonObject.toString());
-                        try {
-                            if (UserService.login(jsonObject, "15715155071",
-                                    "11111111", Common.USER_TYPE_SHIPPER)) {
-//                                UserService.showUserInfo();
-                            } else {
-                                Toast.makeText(context, UserService.getErrorMsg(jsonObject),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Log.e(FragmentHome.class.getName(), volleyError.getMessage(), volleyError);
-                        Toast.makeText(context, context.getResources().getString(R.string.network_error),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }, params);
-        requestQueue.add(request);
-
         return view;
     }
 
     /**
      * 初始化视图
      *
-     * @param view
+     * @param view View
      */
     private void initView(View view) {
         layoutDot = (LinearLayout) view.findViewById(R.id.home_layout_dot);
@@ -228,7 +176,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 startActivity(intentPlaceOrder);
                 break;
             default
-                :
+                    :
                 Log.d(this.getClass().getName(), "unknown button id");
                 break;
         }

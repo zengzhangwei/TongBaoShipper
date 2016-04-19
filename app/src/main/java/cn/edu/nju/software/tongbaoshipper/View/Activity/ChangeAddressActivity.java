@@ -1,8 +1,8 @@
 package cn.edu.nju.software.tongbaoshipper.View.Activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,11 +44,12 @@ import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.Service.ShipperService;
 import cn.edu.nju.software.tongbaoshipper.View.Adapter.PoiInfoAdapter;
 
-public class ChangeAddressActivity extends AppCompatActivity implements View.OnClickListener{
+public class ChangeAddressActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ListView lvPoiInfo;
     private Address address;
     private EditText etLocation, etPhone, etContact;
+    private AddressTextWatch addressTextWatch;
     private PoiSearch poiSearch;
     private RequestQueue requestQueue;
 
@@ -60,6 +61,7 @@ public class ChangeAddressActivity extends AppCompatActivity implements View.OnC
 
         Intent intent = this.getIntent();
         address = (Address) intent.getSerializableExtra(Address.class.getName());
+        addressTextWatch = new AddressTextWatch();
         initView();
         requestQueue = Volley.newRequestQueue(this);
         poiSearch = PoiSearch.newInstance();
@@ -85,27 +87,7 @@ public class ChangeAddressActivity extends AppCompatActivity implements View.OnC
 
         btnBack.setOnClickListener(this);
         btnConfirm.setOnClickListener(this);
-        etLocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                poiSearch.searchInCity(
-                        // TODO default city set
-                        new PoiCitySearchOption().city("南京")
-                                .keyword(etLocation.getText().toString())
-                                .pageCapacity(Common.POI_SEARCH_PAGE_CAPACITY)
-                );
-            }
-        });
+        etLocation.addTextChangedListener(addressTextWatch);
     }
 
     @Override
@@ -175,14 +157,19 @@ public class ChangeAddressActivity extends AppCompatActivity implements View.OnC
 
     /**
      * set address info
-     * @param addressName   String
-     * @param location      Location
+     *
+     * @param addressName String
+     * @param location    Location
      */
     public void setLocation(String addressName, LatLng location) {
+        // remove text changed listener
+        etLocation.removeTextChangedListener(addressTextWatch);
         etLocation.setText(addressName);
         this.address.setLat(location.latitude);
         this.address.setLng(location.longitude);
         lvPoiInfo.setVisibility(View.INVISIBLE);
+        // add text changed listener
+        etLocation.addTextChangedListener(addressTextWatch);
     }
 
     @Override
@@ -219,6 +206,31 @@ public class ChangeAddressActivity extends AppCompatActivity implements View.OnC
                 Log.d(AddAddressActivity.class.getName(), "Not found result!");
             } else {
                 Log.d(AddAddressActivity.class.getName(), poiDetailResult.getName() + poiDetailResult.getAddress());
+            }
+        }
+    }
+
+    private class AddressTextWatch implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String location = etLocation.getText().toString();
+            if (!location.equals("")) {
+                poiSearch.searchInCity(new PoiCitySearchOption()
+                                .city("南京")
+                                .keyword(location)
+                                .pageCapacity(Common.POI_SEARCH_PAGE_CAPACITY)
+                );
             }
         }
     }

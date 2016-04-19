@@ -19,6 +19,7 @@
     <string name="frame_order">订单</string>
     <string name="frame_my">我</string>
     <string name="hint_exit">再按一次退出程序</string>
+    <string name="login_invalid">登录信息失效，请重新登陆！</string>
 
     <!--fragment my-->
     <string name="title_my">我的</string>

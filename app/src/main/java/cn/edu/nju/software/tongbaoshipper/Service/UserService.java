@@ -1,13 +1,24 @@
 package cn.edu.nju.software.tongbaoshipper.Service;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import cn.edu.nju.software.tongbaoshipper.Common.Account;
@@ -15,6 +26,9 @@ import cn.edu.nju.software.tongbaoshipper.Common.Message;
 import cn.edu.nju.software.tongbaoshipper.Common.MonthlyAccount;
 import cn.edu.nju.software.tongbaoshipper.Common.User;
 import cn.edu.nju.software.tongbaoshipper.Const.Net;
+import cn.edu.nju.software.tongbaoshipper.Const.Prefs;
+import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.View.Activity.LoginActivity;
 
 public class UserService {
 
@@ -82,12 +96,12 @@ public class UserService {
             user.setPhoneNum(phoneNum);
             user.setPassword(password);
             user.setType(type);
-            User.login(user);
             try {
-                User.getInstance().setRegisterTime(sdf.parse(data.getString("registerTime")));
+                user.setRegisterTime(sdf.parse(data.getString("registerTime")));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            User.login(user);
             return true;
         }
         return false;
@@ -373,6 +387,100 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * save object in SharedPreferences
+     *
+     * @param context Context
+     * @param key     String
+     * @param object  Object
+     */
+    public static void saveObject(Context context, String key, Object object) {
+        Log.d(context.getClass().getName(), "save object: " + key);
+        SharedPreferences.Editor editor = context.getSharedPreferences(Prefs.PREF_NAME, Context.MODE_PRIVATE).edit();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(object);
+            String objectVal = new String(Base64.encode(bos.toByteArray(), Base64.DEFAULT));
+            editor.putString(key, objectVal);
+            editor.apply();
+            Log.d(context.getClass().getName(), objectVal);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bos.close();
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * get SharedPreferences object
+     *
+     * @param context Context
+     * @param key     String
+     * @return object
+     */
+    @SuppressWarnings("unchecked")
+    public static Object getObject(Context context, String key) {
+        Log.d(context.getClass().getName(), "get object: " + key);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Prefs.PREF_NAME, Context.MODE_PRIVATE);
+        Object object = null;
+        if (sharedPreferences.contains(key)) {
+            String objectVal = sharedPreferences.getString(key, null);
+            Log.d(context.getClass().getName(), objectVal);
+            byte[] buffer = Base64.decode(objectVal, Base64.DEFAULT);
+            ByteArrayInputStream bis = new ByteArrayInputStream(buffer);
+            ObjectInputStream input = null;
+            try {
+                input = new ObjectInputStream(bis);
+                object = input.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    bis.close();
+                    if (input != null) {
+                        input.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return object;
+    }
+
+    /**
+     * call when token invalid
+     *
+     * @param context Context
+     * @param isShow  boolean-whether show toast message
+     */
+    public static void tokenInvalid(Context context, boolean isShow) {
+        Log.d(context.getClass().getName(), "token invalid");
+        User.logout();
+        // init shared preferences user date
+        SharedPreferences.Editor editor = context.getSharedPreferences(Prefs.PREF_NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(Prefs.PREF_KEY_USER, "");
+        editor.apply();
+        // show login message invalid
+        if (isShow) {
+            Toast.makeText(context, context.getResources().getString(R.string.login_invalid),
+                    Toast.LENGTH_SHORT).show();
+        }
+        // login activity
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
     }
 
 }
