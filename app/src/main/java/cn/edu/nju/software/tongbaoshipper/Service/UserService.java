@@ -1,7 +1,6 @@
 package cn.edu.nju.software.tongbaoshipper.Service;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.Log;
@@ -22,13 +21,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import cn.edu.nju.software.tongbaoshipper.Common.Account;
+import cn.edu.nju.software.tongbaoshipper.Common.Banner;
 import cn.edu.nju.software.tongbaoshipper.Common.Message;
 import cn.edu.nju.software.tongbaoshipper.Common.MonthlyAccount;
 import cn.edu.nju.software.tongbaoshipper.Common.User;
 import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.Const.Prefs;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.LoginActivity;
 
 public class UserService {
 
@@ -266,6 +265,39 @@ public class UserService {
     }
 
     /**
+     * 获取首页轮播图片
+     *
+     * @param jsonObject response
+     * @return boolean
+     * @throws JSONException
+     */
+    public static ArrayList<Banner> getBannerInfo(JSONObject jsonObject) throws JSONException {
+        ArrayList<Banner> arrBanner = new ArrayList<>();
+        if (getResult(jsonObject)) {
+            JSONArray data = jsonObject.getJSONArray("data");
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject object = data.getJSONObject(i);
+                Banner banner = new Banner();
+                banner.setImgUrl(object.getString("imgUrl"));
+                banner.setTargetUrl(object.getString("targetUrl"));
+                arrBanner.add(banner);
+            }
+        }
+        return arrBanner;
+    }
+
+    /**
+     * 判断某个token是否有效
+     *
+     * @param jsonObject response
+     * @return boolean
+     * @throws JSONException
+     */
+    public static boolean tokenValid(JSONObject jsonObject) throws JSONException {
+        return getResult(jsonObject);
+    }
+
+    /**
      * 查看账单
      *
      * @param jsonObject response
@@ -478,9 +510,6 @@ public class UserService {
             Toast.makeText(context, context.getResources().getString(R.string.login_invalid),
                     Toast.LENGTH_SHORT).show();
         }
-        // login activity
-        Intent intent = new Intent(context, LoginActivity.class);
-        context.startActivity(intent);
     }
 
 }

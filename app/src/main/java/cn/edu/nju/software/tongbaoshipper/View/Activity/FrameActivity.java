@@ -37,6 +37,7 @@ import java.util.Map;
 
 import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
 import cn.edu.nju.software.tongbaoshipper.Common.User;
+import cn.edu.nju.software.tongbaoshipper.Const.Common;
 import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.Const.Prefs;
 import cn.edu.nju.software.tongbaoshipper.R;
@@ -52,7 +53,6 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
      * is start app(load user message)
      */
     private static boolean IS_START_APP = true;
-    private LinearLayout btnHome, btnNearby, btnOrder, btnMy;
     private ImageView ivHome, ivNearby, ivOrder, ivMy;
     private TextView tvHome, tvNearby, tvOrder, tvMy;
     private FragmentManager fm;
@@ -78,10 +78,42 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
                             public void onResponse(JSONObject jsonObject) {
                                 Log.d(FrameActivity.class.getName(), jsonObject.toString());
                                 try {
-                                    if (UserService.getResult(jsonObject)) {
-                                        // register user
-                                        User.login(user);
-                                        UserService.showUserInfo();
+                                    if (UserService.tokenValid(jsonObject)) {
+                                        // user login
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("phoneNumber", user.getPhoneNum());
+                                        params.put("password", user.getPassword());
+                                        params.put("type", String.valueOf(Common.USER_TYPE_SHIPPER));
+                                        Request<JSONObject> request = new PostRequest(Net.URL_USER_LOGIN,
+                                                new Response.Listener<JSONObject>() {
+                                                    @Override
+                                                    public void onResponse(JSONObject jsonObject) {
+                                                        Log.d(FrameActivity.class.getName(), "auto login");
+                                                        Log.d(FrameActivity.class.getName(), jsonObject.toString());
+                                                        try {
+                                                            if (UserService.login(jsonObject, user.getPhoneNum(),
+                                                                    user.getPassword(), Common.USER_TYPE_SHIPPER)) {
+                                                                // local record user message
+                                                                UserService.saveObject(FrameActivity.this, Prefs.PREF_KEY_USER, User.getInstance());
+                                                            } else {
+                                                                Toast.makeText(FrameActivity.this, UserService.getErrorMsg(jsonObject),
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError volleyError) {
+                                                        Log.e(FrameActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                                        Toast.makeText(FrameActivity.this, FrameActivity.this.getResources().getString(R.string.network_error),
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }, params);
+
+                                        requestQueue.add(request);
                                     } else {
                                         UserService.tokenInvalid(FrameActivity.this, true);
                                     }
@@ -118,10 +150,10 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
      * 初始化视图
      */
     private void initView() {
-        btnHome = (LinearLayout) findViewById(R.id.frame_btn_home);
-        btnNearby = (LinearLayout) findViewById(R.id.frame_btn_nearby);
-        btnOrder = (LinearLayout) findViewById(R.id.frame_btn_order);
-        btnMy = (LinearLayout) findViewById(R.id.frame_btn_my);
+        LinearLayout btnHome = (LinearLayout) findViewById(R.id.frame_btn_home);
+        LinearLayout btnNearby = (LinearLayout) findViewById(R.id.frame_btn_nearby);
+        LinearLayout btnOrder = (LinearLayout) findViewById(R.id.frame_btn_order);
+        LinearLayout btnMy = (LinearLayout) findViewById(R.id.frame_btn_my);
         ivHome = (ImageView) findViewById(R.id.frame_iv_home);
         ivNearby = (ImageView) findViewById(R.id.frame_iv_nearby);
         ivOrder = (ImageView) findViewById(R.id.frame_iv_order);

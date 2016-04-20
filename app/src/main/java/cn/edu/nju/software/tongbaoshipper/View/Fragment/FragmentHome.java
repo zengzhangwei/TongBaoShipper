@@ -3,6 +3,7 @@ package cn.edu.nju.software.tongbaoshipper.View.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,11 +15,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.edu.nju.software.tongbaoshipper.Common.Banner;
+import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.AddressActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.DriverActivity;
 import cn.edu.nju.software.tongbaoshipper.View.Activity.MapActivity;
@@ -32,14 +48,12 @@ import static cn.edu.nju.software.tongbaoshipper.R.id.home_btn_help;
 public class FragmentHome extends Fragment implements View.OnClickListener {
 
     private Context context;
-    private List<View> ivList;
-    private int[] ivIdList = {R.drawable.top_banner_android, R.drawable.shadow_article, R.drawable.avatar};
     private LinearLayout layoutDot;
     private ViewPager vpBanner;
-
-    private TextView btnMessage, btnAddress, btnDriver,
-            btnWallet, btnOrder, btnHelp;
-    private RelativeLayout btnOrderTruck;
+    private List<ImageView> ivList;
+    private ArrayList<Banner> arrBanner;
+    private BannerPagerAdapter bannerPagerAdapter;
+    private RequestQueue requestQueue;
 
     public FragmentHome() {
         super();
@@ -49,35 +63,44 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     public FragmentHome(Context context) {
         super();
         this.context = context;
+        arrBanner = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = View.inflate(context, R.layout.fragment_home, null);
-        // 初始化视图
+
+        // init view
         initView(view);
-        // 初始化banner图片数据
-        initBannerData(view);
-        // 初始化banner事件
+
+        requestQueue = Volley.newRequestQueue(context);
+
+        // init banner resource
+        initBannerResource();
+        // set banner adapter
+        bannerPagerAdapter = new BannerPagerAdapter(context, arrBanner, ivList);
+        vpBanner.setAdapter(bannerPagerAdapter);
+        // init banner action
         initBannerAction();
+
         return view;
     }
 
     /**
-     * 初始化视图
+     * init view
      *
      * @param view View
      */
     private void initView(View view) {
         layoutDot = (LinearLayout) view.findViewById(R.id.home_layout_dot);
         vpBanner = (ViewPager) view.findViewById(R.id.home_vp_banner);
-        btnMessage = (TextView) view.findViewById(R.id.home_btn_message);
-        btnAddress = (TextView) view.findViewById(R.id.home_btn_address);
-        btnDriver = (TextView) view.findViewById(R.id.home_btn_driver);
-        btnWallet = (TextView) view.findViewById(R.id.home_btn_wallet);
-        btnOrder = (TextView) view.findViewById(R.id.home_btn_order);
-        btnHelp = (TextView) view.findViewById(R.id.home_btn_help);
-        btnOrderTruck = (RelativeLayout) view.findViewById(R.id.home_btn_order_truck);
+        TextView btnMessage = (TextView) view.findViewById(R.id.home_btn_message);
+        TextView btnAddress = (TextView) view.findViewById(R.id.home_btn_address);
+        TextView btnDriver = (TextView) view.findViewById(R.id.home_btn_driver);
+        TextView btnWallet = (TextView) view.findViewById(R.id.home_btn_wallet);
+        TextView btnOrder = (TextView) view.findViewById(R.id.home_btn_order);
+        TextView btnHelp = (TextView) view.findViewById(R.id.home_btn_help);
+        RelativeLayout btnOrderTruck = (RelativeLayout) view.findViewById(R.id.home_btn_order_truck);
 
         // 添加事件监听器
         btnMessage.setOnClickListener(this);
@@ -89,30 +112,95 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         btnOrderTruck.setOnClickListener(this);
     }
 
-    private void initBannerData(View view) {
+    /**
+     * init banner resource
+     */
+    private void initBannerResource() {
         ivList = new ArrayList<>();
-        for (int ivID : ivIdList) {
-            ImageView iv = new ImageView(view.getContext());
-            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT));
-            iv.setImageResource(ivID);
-            ivList.add(iv);
+        arrBanner = new ArrayList<>();
+        // get banner data
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                Net.URL_USER_GET_BANNER_INFO,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        Log.d(FragmentHome.class.getName(), jsonObject.toString());
+                        try {
+                            if (UserService.getResult(jsonObject)) {
+                                ArrayList<Banner> arr = UserService.getBannerInfo(jsonObject);
+                                // init banner
+                                for (int i = 0; i < arr.size(); i++) {
+                                    arrBanner.add(arr.get(i));
+                                    bannerPagerAdapter.notifyDataSetChanged();
+                                }
 
-            // 设置标识点
-            View vDot = new View(view.getContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(5, 5);
-            params.leftMargin = 2;
-            vDot.setLayoutParams(params);
-            vDot.setBackgroundResource(R.drawable.dot_background);
-            vDot.setEnabled(false);
-            layoutDot.addView(vDot);
-        }
-
-        // 设置banner ViewPager adapter
-        vpBanner.setAdapter(new BannerPagerAdapter(ivList));
+                                // init banner dot
+                                for (int j = 0; j < arrBanner.size(); j++) {
+                                    View vDot = new View(context);
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8, 8);
+                                    params.leftMargin = 4;
+                                    vDot.setLayoutParams(params);
+                                    if (j == 0) {
+                                        vDot.setEnabled(true);
+                                    } else {
+                                        vDot.setEnabled(false);
+                                    }
+                                    vDot.setBackgroundResource(R.drawable.dot_background);
+                                    layoutDot.addView(vDot);
+                                }
+                                // init banner image
+                                for (int i = 0; i < arrBanner.size(); i++) {
+                                    ImageRequest imageRequest = new ImageRequest(arrBanner.get(i).getImgUrl(),
+                                            new Response.Listener<Bitmap>() {
+                                                @Override
+                                                public void onResponse(Bitmap bitmap) {
+                                                    Log.d(FragmentHome.class.getName(), "get banner icon");
+                                                    ImageView iv = new ImageView(context);
+                                                    iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                                    iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                                            LinearLayout.LayoutParams.MATCH_PARENT));
+                                                    iv.setImageBitmap(bitmap);
+                                                    ivList.add(iv);
+                                                    bannerPagerAdapter.notifyDataSetChanged();
+                                                }
+                                            }, 0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.ARGB_8888,
+                                            new Response.ErrorListener() {
+                                                @Override
+                                                public void onErrorResponse(VolleyError volleyError) {
+                                                    Log.e(FragmentHome.class.getName(), volleyError.getMessage(), volleyError);
+                                                    Toast.makeText(context, context.getResources().getString(R.string.network_error),
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                    );
+                                    requestQueue.add(imageRequest);
+                                    requestQueue.start();
+                                    bannerPagerAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                Toast.makeText(context, UserService.getErrorMsg(jsonObject),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e(context.getClass().getName(), volleyError.getMessage(), volleyError);
+                    }
+                }
+        );
+        requestQueue.add(request);
+        requestQueue.start();
     }
 
+    /**
+     * init banner action
+     */
     private void initBannerAction() {
         vpBanner.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

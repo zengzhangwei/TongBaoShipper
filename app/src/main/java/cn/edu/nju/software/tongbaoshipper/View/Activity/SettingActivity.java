@@ -4,14 +4,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import cn.edu.nju.software.tongbaoshipper.Common.User;
 import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.Service.UserService;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -56,9 +56,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                             public void onClick(DialogInterface dialog, int which) {
                                 // 用户注销
                                 Log.d(SettingActivity.class.getName(), "confirm logout");
-                                User.logout();
-                                Intent intentLogin = new Intent(SettingActivity.this, LoginActivity.class);
-                                startActivity(intentLogin);
+                                // just use token invalids
+                                UserService.tokenInvalid(SettingActivity.this, false);
+                                // login activity
+                                Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                                startActivity(intent);
                                 finish();
                             }
                         }

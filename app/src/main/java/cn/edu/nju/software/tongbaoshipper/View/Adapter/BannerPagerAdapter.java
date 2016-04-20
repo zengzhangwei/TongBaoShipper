@@ -1,26 +1,35 @@
 package cn.edu.nju.software.tongbaoshipper.View.Adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by MoranHe on 2016/1/15.
- */
+import cn.edu.nju.software.tongbaoshipper.Common.Banner;
+
 public class BannerPagerAdapter extends PagerAdapter {
 
-    private List<View> iv_list;
+    private Context context;
+    private ArrayList<Banner> arrBanner = new ArrayList<>();
+    private List<ImageView> ivList = new ArrayList<>();
 
-    public BannerPagerAdapter(List<View> list) {
-        this.iv_list = list;
+    public BannerPagerAdapter(Context context, ArrayList<Banner> arrBanner, List<ImageView> ivList) {
+        super();
+        this.context = context;
+        this.arrBanner = arrBanner;
+        this.ivList = ivList;
     }
 
     @Override
     public int getCount() {
-        return iv_list.size();
+        return ivList.size();
     }
 
     @Override
@@ -29,15 +38,25 @@ public class BannerPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        Log.i(this.getClass().getName(), "instantiate item position: " + position);
-        container.addView(iv_list.get(position));
-        return iv_list.get(position);
+    public Object instantiateItem(ViewGroup container, final int position) {
+        Log.d(this.getClass().getName(), "instantiate item position: " + position);
+        ImageView view = ivList.get(position);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(context.getClass().getName(), "banner click: " + position);
+                Uri uri = Uri.parse(arrBanner.get(position).getTargetUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                context.startActivity(intent);
+            }
+        });
+        container.addView(view);
+        return view;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Log.i(this.getClass().getName(), "destroy item position: " + position);
-        container.removeView(iv_list.get(position));
+        Log.d(this.getClass().getName(), "destroy item position: " + position);
+        container.removeView(ivList.get(position));
     }
 }
