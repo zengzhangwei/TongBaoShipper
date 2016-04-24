@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import cn.edu.nju.software.tongbaoshipper.R;
@@ -50,27 +52,30 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.setting_btn_logout:
                 Log.d(SettingActivity.class.getName(), "logout");
-                Dialog dialog = new AlertDialog.Builder(this).setTitle(R.string.setting_logout_confirm_msg).setPositiveButton(
-                        R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 用户注销
-                                Log.d(SettingActivity.class.getName(), "confirm logout");
-                                // just use token invalids
-                                UserService.tokenInvalid(SettingActivity.this, false);
-                                // login activity
-                                Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }
-                ).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                View vDialog = LayoutInflater.from(SettingActivity.this).inflate(R.layout.dialog_setting_modify_password, null);
+                final Dialog dialog = new AlertDialog.Builder(SettingActivity.this).setView(vDialog).create();
+                Button btnCancel = (Button) vDialog.findViewById(R.id.dialog_btn_cancel);
+                Button btnComfirm = (Button) vDialog.findViewById(R.id.dialog_btn_confirm);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View v) {
                         Log.d(SettingActivity.class.getName(), "cancel logout");
                         dialog.dismiss();
                     }
-                }).create();
+                });
+                btnComfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // user logout
+                        Log.d(SettingActivity.class.getName(), "confirm logout");
+                        // just use token invalids
+                        UserService.tokenInvalid(SettingActivity.this, false);
+                        // login activity
+                        Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
                 dialog.show();
                 break;
             default:

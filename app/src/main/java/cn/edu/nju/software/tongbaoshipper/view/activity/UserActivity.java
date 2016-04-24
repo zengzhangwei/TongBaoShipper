@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -131,67 +132,65 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.user_btn_name:
                 Log.d(this.getClass().getName(), "name");
-                final EditText etNickName = new EditText(this);
-                etNickName.setBackground(null);
-                etNickName.setHint(this.getResources().getString(R.string.user_dialog_hint));
-                etNickName.setHintTextColor(ContextCompat.getColor(this, R.color.font_hint));
-                etNickName.setTextSize(getResources().getDimension(R.dimen.common_hint_text_size));
-                Dialog dialog = new AlertDialog.Builder(this).setTitle(this.getResources().getString(R.string.user_modify_nick_name))
-                        .setView(etNickName)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface dialog, int which) {
-                                // 修改用户昵称
-                                Log.d(User.class.getName(), "confirm modify nick name");
-                                Map<String, String> params = new HashMap<>();
-                                params.put("token", User.getInstance().getToken());
-                                params.put("nickName", etNickName.getText().toString());
-                                Request<JSONObject> request = new PostRequest(Net.URL_USER_MODIFY_NICK_NAME,
-                                        new Response.Listener<JSONObject>() {
-                                            @Override
-                                            public void onResponse(JSONObject jsonObject) {
-                                                Log.d(UserActivity.class.getName(), jsonObject.toString());
-                                                try {
-                                                    if (UserService.modifyNickName(jsonObject, etNickName.getText().toString())) {
-                                                        Toast.makeText(UserActivity.this, UserActivity.this.getResources().getString(R.string.user_modify_nick_name_success),
-                                                                Toast.LENGTH_SHORT).show();
-                                                        // 修改界面用户昵称
-                                                        tvName.setText(etNickName.getText().toString());
+                View vDialog = LayoutInflater.from(UserActivity.this).inflate(R.layout.dialog_user_modify_nick_name, null);
+                final Dialog dialog = new AlertDialog.Builder(UserActivity.this).setView(vDialog).create();
+                final EditText etNickName = (EditText) vDialog.findViewById(R.id.dialog_et);
+                Button btnCancel = (Button) vDialog.findViewById(R.id.dialog_btn_cancel);
+                Button btnComfirm = (Button) vDialog.findViewById(R.id.dialog_btn_confirm);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(UserActivity.class.getName(), "cancel modify nick name");
+                        dialog.dismiss();
+                    }
+                });
+                btnComfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // modify user nick name
+                        Log.d(User.class.getName(), "confirm modify nick name");
+                        Map<String, String> params = new HashMap<>();
+                        params.put("token", User.getInstance().getToken());
+                        params.put("nickName", etNickName.getText().toString());
+                        Request<JSONObject> request = new PostRequest(Net.URL_USER_MODIFY_NICK_NAME,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject jsonObject) {
+                                        Log.d(UserActivity.class.getName(), jsonObject.toString());
+                                        try {
+                                            if (UserService.modifyNickName(jsonObject, etNickName.getText().toString())) {
+                                                Toast.makeText(UserActivity.this, UserActivity.this.getResources().getString(R.string.user_modify_nick_name_success),
+                                                        Toast.LENGTH_SHORT).show();
+                                                // change ui user nick name
+                                                tvName.setText(etNickName.getText().toString());
 
-                                                        dialog.dismiss();
-                                                    } else {
-                                                        Toast.makeText(UserActivity.this, UserService.getErrorMsg(jsonObject),
-                                                                Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
+                                                dialog.dismiss();
+                                            } else {
+                                                Toast.makeText(UserActivity.this, UserService.getErrorMsg(jsonObject),
+                                                        Toast.LENGTH_SHORT).show();
                                             }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError volleyError) {
-                                                Log.e(UserActivity.class.getName(), volleyError.getMessage(), volleyError);
-                                                // http authentication 401
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError volleyError) {
+                                        Log.e(UserActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                        // http authentication 401
 //                                                if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
 //                                                    Intent intent = new Intent(UserActivity.this, LoginActivity.class);
 //                                                    startActivity(intent);
 //                                                    return;
 //                                                }
-                                                Toast.makeText(UserActivity.this, UserActivity.this.getResources().getString(R.string.network_error),
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-                                        }, params);
-                                requestQueue.add(request);
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Log.d(UserActivity.class.getName(), "cancel modify nick name");
-                                dialog.dismiss();
-                            }
-                        }).create();
+                                        Toast.makeText(UserActivity.this, UserActivity.this.getResources().getString(R.string.network_error),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }, params);
+                        requestQueue.add(request);
+                    }
+                });
                 dialog.show();
                 break;
             default:
