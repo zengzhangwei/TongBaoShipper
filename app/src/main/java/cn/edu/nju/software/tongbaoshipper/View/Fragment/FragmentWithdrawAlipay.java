@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Fragment;
+package cn.edu.nju.software.tongbaoshipper.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,13 +23,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
 
-public class FragmentWithdrawAlipay extends Fragment implements View.OnClickListener{
+public class FragmentWithdrawAlipay extends Fragment implements View.OnClickListener {
 
     private Context context;
     private EditText etAccount, etAmount;
@@ -54,7 +54,8 @@ public class FragmentWithdrawAlipay extends Fragment implements View.OnClickList
 
     /**
      * init view
-     * @param view
+     *
+     * @param view View
      */
     private void initView(View view) {
         etAccount = (EditText) view.findViewById(R.id.withdraw_alipay_et_account);
@@ -81,7 +82,7 @@ public class FragmentWithdrawAlipay extends Fragment implements View.OnClickList
                     Toast.makeText(context, context.getResources().getString(R.string.input_alipay_account),
                             Toast.LENGTH_SHORT).show();
                     return;
-                } else if(etAmount.getText().toString().equals("")) {
+                } else if (etAmount.getText().toString().equals("")) {
                     Toast.makeText(context, context.getResources().getString(R.string.input_amount),
                             Toast.LENGTH_SHORT).show();
                     return;

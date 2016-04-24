@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.View.Adapter.AddressAdapter;
-import cn.edu.nju.software.tongbaoshipper.Common.Address;
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.ShipperService;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.common.Address;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
+import cn.edu.nju.software.tongbaoshipper.view.adapter.AddressAdapter;
 
 public class AddressActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,6 +43,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+
         // 初始化用户常用地址信息
         if (User.isLogin()) {
             Map<String, String> params = new HashMap<>();

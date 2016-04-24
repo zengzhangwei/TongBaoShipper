@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context=".View.Activity.AddressActivity">
+    tools:context=".view.activity.AddressActivity">
 
     <RelativeLayout
         android:id="@+id/address_title"

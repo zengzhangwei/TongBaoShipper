@@ -1,11 +1,11 @@
-package cn.edu.nju.software.tongbaoshipper.Common;
+package cn.edu.nju.software.tongbaoshipper.common;
 
 import java.util.Date;
 
 public class Account {
 
     /**
-     * 账单id test
+     * 账单id
      */
     private int id;
     /**

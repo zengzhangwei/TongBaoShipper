@@ -1,6 +1,5 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
-import android.app.ActionBar;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,33 +10,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Common;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+
 import com.sevenheaven.segmentcontrol.CompleteListView;
-import     android.os.Handler;
 
 /**
  * Created by zhang on 2016/4/16.

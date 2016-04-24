@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".View.Activity.AddDriverActivity">
+    tools:context=".view.activity.AddDriverActivity">
 
     <RelativeLayout
         android:id="@+id/add_driver_title"

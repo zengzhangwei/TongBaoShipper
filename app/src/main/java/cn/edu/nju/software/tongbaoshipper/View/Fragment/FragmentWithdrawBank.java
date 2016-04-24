@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Fragment;
+package cn.edu.nju.software.tongbaoshipper.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,15 +23,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
 
-/**
- * Created by MoranHe on 2016/4/1.
- */
 public class FragmentWithdrawBank extends Fragment implements View.OnClickListener{
 
     private Context context;

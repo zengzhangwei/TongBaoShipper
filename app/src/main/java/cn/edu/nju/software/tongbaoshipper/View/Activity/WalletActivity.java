@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,21 +24,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.View.Adapter.AccountAdapter;
-import cn.edu.nju.software.tongbaoshipper.Common.Account;
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
+import cn.edu.nju.software.tongbaoshipper.view.adapter.AccountAdapter;
+import cn.edu.nju.software.tongbaoshipper.common.Account;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
+import cn.jpush.android.api.JPushInterface;
 
 public class WalletActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tvMoney;
     private ListView lvAccount;
     private LinearLayout vEmpty;
-    private LinearLayout btnBack;
-    private RelativeLayout btnBill, btnWithdraw, btnRecharge;
     private AccountAdapter accountAdapter;
     private RequestQueue requestQueue;
 
@@ -46,6 +45,7 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
+
         // 设置用户账户余额、账单信息
         if (User.isLogin()) {
             tvMoney.setText(String.format("￥%.2f", User.getInstance().getMoney()));
@@ -144,10 +144,10 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
      */
     private void initView() {
         tvMoney = (TextView) findViewById(R.id.wallet_tv_money);
-        btnBack = (LinearLayout) findViewById(R.id.wallet_btn_back);
-        btnBill = (RelativeLayout) findViewById(R.id.wallet_btn_bill);
-        btnWithdraw = (RelativeLayout) findViewById(R.id.wallet_btn_withdraw);
-        btnRecharge = (RelativeLayout) findViewById(R.id.wallet_btn_recharge);
+        LinearLayout btnBack = (LinearLayout) findViewById(R.id.wallet_btn_back);
+        RelativeLayout btnBill = (RelativeLayout) findViewById(R.id.wallet_btn_bill);
+        RelativeLayout btnWithdraw = (RelativeLayout) findViewById(R.id.wallet_btn_withdraw);
+        RelativeLayout btnRecharge = (RelativeLayout) findViewById(R.id.wallet_btn_recharge);
         lvAccount = (ListView) findViewById(R.id.account_lv);
         vEmpty = (LinearLayout) findViewById(R.id.account_empty);
 

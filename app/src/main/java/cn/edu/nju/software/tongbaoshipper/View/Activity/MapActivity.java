@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

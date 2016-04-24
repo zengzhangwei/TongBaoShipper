@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.Service;
+package cn.edu.nju.software.tongbaoshipper.service;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,9 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import cn.edu.nju.software.tongbaoshipper.Common.Address;
-import cn.edu.nju.software.tongbaoshipper.Common.Driver;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
+import cn.edu.nju.software.tongbaoshipper.common.Address;
+import cn.edu.nju.software.tongbaoshipper.common.Driver;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
 
 public class ShipperService {
 

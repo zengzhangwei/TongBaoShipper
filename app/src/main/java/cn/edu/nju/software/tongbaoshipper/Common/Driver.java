@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.Common;
+package cn.edu.nju.software.tongbaoshipper.common;
 
 import java.util.Date;
 

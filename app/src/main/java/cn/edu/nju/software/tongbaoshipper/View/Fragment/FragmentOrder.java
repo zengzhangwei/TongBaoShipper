@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Fragment;
+package cn.edu.nju.software.tongbaoshipper.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,9 +20,6 @@ import java.util.List;
 
 import cn.edu.nju.software.tongbaoshipper.R;
 
-/**
- * Created by MoranHe on 2016/1/13.
- */
 public class FragmentOrder extends Fragment {
 
     private Context context;

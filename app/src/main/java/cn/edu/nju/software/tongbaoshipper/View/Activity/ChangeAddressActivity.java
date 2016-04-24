@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,14 +35,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.Address;
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Common;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.ShipperService;
-import cn.edu.nju.software.tongbaoshipper.View.Adapter.PoiInfoAdapter;
+import cn.edu.nju.software.tongbaoshipper.common.Address;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Common;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
+import cn.edu.nju.software.tongbaoshipper.view.adapter.PoiInfoAdapter;
 
 public class ChangeAddressActivity extends AppCompatActivity implements View.OnClickListener {
 

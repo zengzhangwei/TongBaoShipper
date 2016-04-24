@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Fragment;
+package cn.edu.nju.software.tongbaoshipper.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

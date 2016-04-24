@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Adapter;
+package cn.edu.nju.software.tongbaoshipper.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.edu.nju.software.tongbaoshipper.Common.Banner;
+import cn.edu.nju.software.tongbaoshipper.common.Banner;
 
 public class BannerPagerAdapter extends PagerAdapter {
 

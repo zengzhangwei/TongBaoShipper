@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
-    tools:context=".View.Activity.RechargeActivity">
+    tools:context=".view.activity.RechargeActivity">
 
     <RelativeLayout
         android:id="@+id/recharge_title"

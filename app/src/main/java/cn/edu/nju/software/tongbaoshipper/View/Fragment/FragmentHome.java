@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Fragment;
+package cn.edu.nju.software.tongbaoshipper.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -31,17 +31,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.edu.nju.software.tongbaoshipper.Common.Banner;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.AddressActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.DriverActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.MapActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.MessageActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.PlaceOrderActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.WalletActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Adapter.BannerPagerAdapter;
+import cn.edu.nju.software.tongbaoshipper.common.Banner;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
+import cn.edu.nju.software.tongbaoshipper.view.activity.AddressActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.DriverActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.MapActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.MessageActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.PlaceOrderActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.WalletActivity;
+import cn.edu.nju.software.tongbaoshipper.view.adapter.BannerPagerAdapter;
 
 import static cn.edu.nju.software.tongbaoshipper.R.id.home_btn_help;
 

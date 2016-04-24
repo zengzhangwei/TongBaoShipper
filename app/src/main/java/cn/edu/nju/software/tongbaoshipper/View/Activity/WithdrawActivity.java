@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,13 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentWithdrawAlipay;
-import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentWithdrawBank;
+import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentWithdrawAlipay;
+import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentWithdrawBank;
 
 public class WithdrawActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView tvAlipay, tvBank;
-    private LinearLayout btnBack, btnAlipay, btnBank;
+    private LinearLayout btnAlipay, btnBank;
     private FragmentManager fm;
     private FragmentTransaction ft;
 
@@ -33,7 +33,7 @@ public class WithdrawActivity extends AppCompatActivity implements View.OnClickL
      * 初始化视图
      */
     private void initView() {
-        btnBack = (LinearLayout) findViewById(R.id.withdraw_btn_back);
+        LinearLayout btnBack = (LinearLayout) findViewById(R.id.withdraw_btn_back);
         btnAlipay = (LinearLayout) findViewById(R.id.withdraw_btn_alipay);
         btnBank = (LinearLayout) findViewById(R.id.withdraw_btn_bank);
         tvAlipay = (TextView) findViewById(R.id.withdraw_tv_alipay);
