@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_white"
     android:orientation="vertical"
-    tools:context=".view1.activity1.SettingActivity">
+    tools:context=".view.activity.SettingActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

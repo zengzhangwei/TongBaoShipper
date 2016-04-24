@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
-    tools:context=".view1.activity1.WalletActivity">
+    tools:context=".view.activity.WalletActivity">
 
     <RelativeLayout
         android:id="@+id/wallet_title"

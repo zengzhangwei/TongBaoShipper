@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
-    tools:context=".view1.activity1.PlaceOrderActivity">
+    tools:context=".view.activity.PlaceOrderActivity">
 
     <RelativeLayout
         android:id="@+id/place_order_title"

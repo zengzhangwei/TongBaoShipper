@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view1.activity1.MapActivity">
+    tools:context=".view.activity.MapActivity">
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/map_mv"
