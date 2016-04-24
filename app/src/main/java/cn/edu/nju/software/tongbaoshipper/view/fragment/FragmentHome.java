@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -28,8 +30,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.common.Banner;
@@ -54,6 +60,12 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     private ArrayList<Banner> arrBanner;
     private BannerPagerAdapter bannerPagerAdapter;
     private RequestQueue requestQueue;
+
+    /**
+     * banner image index
+     */
+    private int currentItem = 0;
+    private UIHandler handler = new UIHandler(FragmentHome.this);
 
     public FragmentHome() {
         super();
@@ -82,6 +94,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         vpBanner.setAdapter(bannerPagerAdapter);
         // init banner action
         initBannerAction();
+        // scroll banner image
+        startAdvertise();
 
         return view;
     }
@@ -225,6 +239,12 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         });
     }
 
+    private void startAdvertise() {
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        // 4 seconds scroll banner
+        scheduledExecutorService.scheduleAtFixedRate(new ScrollTask(), 1, 4,
+                TimeUnit.SECONDS);
+    }
 
     @Override
     public void onClick(View v) {
@@ -269,4 +289,37 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+    /**
+     * scroll task
+     */
+    private class ScrollTask implements Runnable {
+
+        @Override
+        public void run() {
+            synchronized (vpBanner) {
+                currentItem = (currentItem + 1) % ivList.size();
+                handler.obtainMessage().sendToTarget();
+            }
+        }
+    }
+
+    /**
+     * ui update handler
+     */
+    private static class UIHandler extends Handler {
+        private WeakReference<FragmentHome> fragment;
+
+        UIHandler(FragmentHome fragment) {
+            this.fragment = new WeakReference<>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            FragmentHome fragmentHome = fragment.get();
+            fragmentHome.vpBanner.setCurrentItem(fragmentHome.currentItem);
+        }
+    }
+
 }
