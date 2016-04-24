@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
-    tools:context=".view.activity.FeedbackActivity">
+    tools:context=".view1.activity1.FeedbackActivity">
 
     <RelativeLayout
         android:id="@+id/feedback_title"

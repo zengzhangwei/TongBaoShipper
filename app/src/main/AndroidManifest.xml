@@ -128,7 +128,7 @@
 
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver
-            android:name=".service.ReceiverService"
+            android:name=".service1.ReceiverService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -151,7 +151,7 @@
 
 
         <activity
-            android:name=".view.activity.FrameActivity"
+            android:name=".view1.activity1.FrameActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -160,62 +160,62 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.UserActivity"
+            android:name=".view1.activity1.UserActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.LoginActivity"
+            android:name=".view1.activity1.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.RegisterActivity"
+            android:name=".view1.activity1.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.ChangePasswordActivity"
+            android:name=".view1.activity1.ChangePasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.WalletActivity"
+            android:name=".view1.activity1.WalletActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AddAddressActivity"
+            android:name=".view1.activity1.AddAddressActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.WithdrawActivity"
+            android:name=".view1.activity1.WithdrawActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AccountActivity"
+            android:name=".view1.activity1.AccountActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.SettingActivity"
+            android:name=".view1.activity1.SettingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.MapActivity"
+            android:name=".view1.activity1.MapActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.RechargeActivity"
+            android:name=".view1.activity1.RechargeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.MessageActivity"
+            android:name=".view1.activity1.MessageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.FeedbackActivity"
+            android:name=".view1.activity1.FeedbackActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AboutActivity"
+            android:name=".view1.activity1.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AddressActivity"
+            android:name=".view1.activity1.AddressActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".view.activity.PlaceOrderActivity"
+            android:name=".view1.activity1.PlaceOrderActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.ChangeAddressActivity"
+            android:name=".view1.activity1.ChangeAddressActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.DriverActivity"
+            android:name=".view1.activity1.DriverActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AddDriverActivity"
+            android:name=".view1.activity1.AddDriverActivity"
             android:screenOrientation="portrait" />
     </application>
 
