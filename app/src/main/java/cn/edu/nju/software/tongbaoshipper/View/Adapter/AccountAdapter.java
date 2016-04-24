@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Adapter;
+package cn.edu.nju.software.tongbaoshipper.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import cn.edu.nju.software.tongbaoshipper.Common.Account;
+import cn.edu.nju.software.tongbaoshipper.common.Account;
 import cn.edu.nju.software.tongbaoshipper.R;
 
 public class AccountAdapter extends BaseAdapter {

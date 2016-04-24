@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.View.Adapter.DriverAdapter;
-import cn.edu.nju.software.tongbaoshipper.Common.Driver;
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.ShipperService;
+import cn.edu.nju.software.tongbaoshipper.common.Driver;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
+import cn.edu.nju.software.tongbaoshipper.view.adapter.DriverAdapter;
 
 public class DriverActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +42,7 @@ public class DriverActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
+
         if (User.isLogin()) {
             Map<String, String> params = new HashMap<>();
             params.put("token", User.getInstance().getToken());

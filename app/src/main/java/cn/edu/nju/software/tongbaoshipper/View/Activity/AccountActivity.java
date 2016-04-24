@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -38,14 +38,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.MonthlyAccount;
-import cn.edu.nju.software.tongbaoshipper.View.Adapter.AccountAdapter;
-import cn.edu.nju.software.tongbaoshipper.Common.Account;
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.common.Account;
+import cn.edu.nju.software.tongbaoshipper.common.MonthlyAccount;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
+import cn.edu.nju.software.tongbaoshipper.view.adapter.AccountAdapter;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Fragment;
+package cn.edu.nju.software.tongbaoshipper.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,16 +22,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 
-import cn.edu.nju.software.tongbaoshipper.View.Activity.AboutActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.FeedbackActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.FrameActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.LoginActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.MessageActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.SettingActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.WalletActivity;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.UserActivity;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.view.activity.AboutActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.FeedbackActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.FrameActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.LoginActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.MessageActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.SettingActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.UserActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.WalletActivity;
 
 public class FragmentMy extends Fragment implements View.OnClickListener {
 
@@ -55,6 +55,7 @@ public class FragmentMy extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+
         // 设置用户姓名、手机号、用户头像
         if (User.isLogin()) {
             tvName.setText(User.getInstance().getNiceName());

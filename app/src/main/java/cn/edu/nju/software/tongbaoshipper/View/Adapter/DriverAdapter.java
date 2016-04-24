@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Adapter;
+package cn.edu.nju.software.tongbaoshipper.view.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,12 +35,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.Driver;
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
+import cn.edu.nju.software.tongbaoshipper.common.Driver;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.ShipperService;
+import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
 
 public class DriverAdapter extends BaseAdapter implements AdapterView.OnItemLongClickListener {
 

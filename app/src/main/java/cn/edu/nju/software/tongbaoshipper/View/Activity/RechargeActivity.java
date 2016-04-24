@@ -1,7 +1,7 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,16 +20,15 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
 
 public class RechargeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText etBankCard, etAmount;
-    private LinearLayout btnBack, btnConfirm;
     private RequestQueue requestQueue;
 
     @Override
@@ -47,8 +46,8 @@ public class RechargeActivity extends AppCompatActivity implements View.OnClickL
     private void initView() {
         etBankCard = (EditText) findViewById(R.id.recharge_et_bank_card);
         etAmount = (EditText) findViewById(R.id.recharge_et_amount);
-        btnBack = (LinearLayout) findViewById(R.id.recharge_btn_back);
-        btnConfirm = (LinearLayout) findViewById(R.id.recharge_btn_confirm);
+        LinearLayout btnBack = (LinearLayout) findViewById(R.id.recharge_btn_back);
+        LinearLayout btnConfirm = (LinearLayout) findViewById(R.id.recharge_btn_confirm);
 
         btnBack.setOnClickListener(this);
         btnConfirm.setOnClickListener(this);

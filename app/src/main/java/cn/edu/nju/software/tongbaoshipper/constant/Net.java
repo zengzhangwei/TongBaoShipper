@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.Const;
+package cn.edu.nju.software.tongbaoshipper.constant;
 
 public class Net {
 

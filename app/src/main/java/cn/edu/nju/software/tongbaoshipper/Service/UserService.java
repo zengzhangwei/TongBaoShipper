@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.Service;
+package cn.edu.nju.software.tongbaoshipper.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,13 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import cn.edu.nju.software.tongbaoshipper.Common.Account;
-import cn.edu.nju.software.tongbaoshipper.Common.Banner;
-import cn.edu.nju.software.tongbaoshipper.Common.Message;
-import cn.edu.nju.software.tongbaoshipper.Common.MonthlyAccount;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
-import cn.edu.nju.software.tongbaoshipper.Const.Prefs;
+import cn.edu.nju.software.tongbaoshipper.common.Account;
+import cn.edu.nju.software.tongbaoshipper.common.Banner;
+import cn.edu.nju.software.tongbaoshipper.common.Message;
+import cn.edu.nju.software.tongbaoshipper.common.MonthlyAccount;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.constant.Prefs;
 import cn.edu.nju.software.tongbaoshipper.R;
 
 public class UserService {

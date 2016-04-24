@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -50,12 +50,12 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
-import cn.edu.nju.software.tongbaoshipper.Const.RequestCode;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.constant.RequestCode;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
 import cz.msebera.android.httpclient.Header;
 
 public class UserActivity extends AppCompatActivity implements View.OnClickListener {
@@ -78,6 +78,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+
         // 设置用户昵称、手机号、头像信息
         if (User.isLogin()) {
             tvName.setText(User.getInstance().getNiceName());
@@ -98,7 +99,6 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         initView();
         requestQueue = Volley.newRequestQueue(this);
-
     }
 
     /**

@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,17 +20,16 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Common;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Common;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
 
 public class ChangePasswordActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText etOldPassword, etNewPassword;
-    private LinearLayout btnBack, btnChangePassword;
     private RequestQueue requestQueue;
 
     @Override
@@ -46,10 +45,10 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
      * 初始化界面
      */
     private void initView() {
-        btnBack = (LinearLayout) findViewById(R.id.cp_btn_back);
+        LinearLayout btnBack = (LinearLayout) findViewById(R.id.cp_btn_back);
         etOldPassword = (EditText) findViewById(R.id.cp_et_old_password);
         etNewPassword = (EditText) findViewById(R.id.cp_et_new_password);
-        btnChangePassword = (LinearLayout) findViewById(R.id.cp_btn);
+        LinearLayout btnChangePassword = (LinearLayout) findViewById(R.id.cp_btn);
 
         btnBack.setOnClickListener(this);
         btnChangePassword.setOnClickListener(this);

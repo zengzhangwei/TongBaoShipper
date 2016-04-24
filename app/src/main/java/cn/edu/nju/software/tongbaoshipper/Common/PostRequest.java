@@ -1,10 +1,9 @@
-package cn.edu.nju.software.tongbaoshipper.Common;
+package cn.edu.nju.software.tongbaoshipper.common;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 import org.json.JSONException;

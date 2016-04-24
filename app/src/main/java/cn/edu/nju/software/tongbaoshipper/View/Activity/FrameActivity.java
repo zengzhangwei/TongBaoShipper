@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Activity;
+package cn.edu.nju.software.tongbaoshipper.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,17 +35,18 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.nju.software.tongbaoshipper.Common.PostRequest;
-import cn.edu.nju.software.tongbaoshipper.Common.User;
-import cn.edu.nju.software.tongbaoshipper.Const.Common;
-import cn.edu.nju.software.tongbaoshipper.Const.Net;
-import cn.edu.nju.software.tongbaoshipper.Const.Prefs;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Common;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
+import cn.edu.nju.software.tongbaoshipper.constant.Prefs;
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.Service.UserService;
-import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentHome;
-import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentMy;
-import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentNearBy;
-import cn.edu.nju.software.tongbaoshipper.View.Fragment.FragmentOrder;
+import cn.edu.nju.software.tongbaoshipper.service.UserService;
+import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentHome;
+import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentMy;
+import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentNearBy;
+import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentOrder;
+import cn.jpush.android.api.JPushInterface;
 
 public class FrameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,88 +63,31 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
     private RequestQueue requestQueue;
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (IS_START_APP) {
-            IS_START_APP = false;
-            final User user = (User) UserService.getObject(FrameActivity.this, Prefs.PREF_KEY_USER);
-            // check user token whether timeout
-            if (user != null) {
-                Log.d(FrameActivity.class.getName(), "valid token whether timeout");
-                Map<String, String> params = new HashMap<>();
-                params.put("token", user.getToken());
-                Request<JSONObject> request = new PostRequest(Net.URL_USER_TOKEN_VALID,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject jsonObject) {
-                                Log.d(FrameActivity.class.getName(), jsonObject.toString());
-                                try {
-                                    if (UserService.tokenValid(jsonObject)) {
-                                        // user login
-                                        Map<String, String> params = new HashMap<>();
-                                        params.put("phoneNumber", user.getPhoneNum());
-                                        params.put("password", user.getPassword());
-                                        params.put("type", String.valueOf(Common.USER_TYPE_SHIPPER));
-                                        Request<JSONObject> request = new PostRequest(Net.URL_USER_LOGIN,
-                                                new Response.Listener<JSONObject>() {
-                                                    @Override
-                                                    public void onResponse(JSONObject jsonObject) {
-                                                        Log.d(FrameActivity.class.getName(), "auto login");
-                                                        Log.d(FrameActivity.class.getName(), jsonObject.toString());
-                                                        try {
-                                                            if (UserService.login(jsonObject, user.getPhoneNum(),
-                                                                    user.getPassword(), Common.USER_TYPE_SHIPPER)) {
-                                                                // local record user message
-                                                                UserService.saveObject(FrameActivity.this, Prefs.PREF_KEY_USER, User.getInstance());
-                                                            } else {
-                                                                Toast.makeText(FrameActivity.this, UserService.getErrorMsg(jsonObject),
-                                                                        Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                },
-                                                new Response.ErrorListener() {
-                                                    @Override
-                                                    public void onErrorResponse(VolleyError volleyError) {
-                                                        Log.e(FrameActivity.class.getName(), volleyError.getMessage(), volleyError);
-                                                        Toast.makeText(FrameActivity.this, FrameActivity.this.getResources().getString(R.string.network_error),
-                                                                Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }, params);
-
-                                        requestQueue.add(request);
-                                    } else {
-                                        UserService.tokenInvalid(FrameActivity.this, true);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                Log.e(FrameActivity.class.getName(), volleyError.getMessage(), volleyError);
-                                Toast.makeText(FrameActivity.this, FrameActivity.this.getResources().getString(R.string.network_error),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }, params);
-                requestQueue.add(request);
-            } else {
-                UserService.tokenInvalid(FrameActivity.this, false);
-            }
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // init jpush
+        JPushInterface.init(this);
+        JPushInterface.setDebugMode(true);
+
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_frame);
         initView();
+
+        // valid token
         requestQueue = Volley.newRequestQueue(FrameActivity.this);
+        tokenValid();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
     }
 
     /**
@@ -313,5 +257,82 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
+    }
+
+    /**
+     * on start app: valid token whether timeout or not
+     */
+    private void tokenValid() {
+        if (IS_START_APP) {
+            IS_START_APP = false;
+            final User user = (User) UserService.getObject(FrameActivity.this, Prefs.PREF_KEY_USER);
+            // check user token whether timeout
+            if (user != null) {
+                Log.d(FrameActivity.class.getName(), "valid token whether timeout or not");
+                Map<String, String> params = new HashMap<>();
+                params.put("token", user.getToken());
+                Request<JSONObject> request = new PostRequest(Net.URL_USER_TOKEN_VALID,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                Log.d(FrameActivity.class.getName(), jsonObject.toString());
+                                try {
+                                    if (UserService.tokenValid(jsonObject)) {
+                                        // user login
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("phoneNumber", user.getPhoneNum());
+                                        params.put("password", user.getPassword());
+                                        params.put("type", String.valueOf(Common.USER_TYPE_SHIPPER));
+                                        Request<JSONObject> request = new PostRequest(Net.URL_USER_LOGIN,
+                                                new Response.Listener<JSONObject>() {
+                                                    @Override
+                                                    public void onResponse(JSONObject jsonObject) {
+                                                        Log.d(FrameActivity.class.getName(), "auto login");
+                                                        Log.d(FrameActivity.class.getName(), jsonObject.toString());
+                                                        try {
+                                                            if (UserService.login(jsonObject, user.getPhoneNum(),
+                                                                    user.getPassword(), Common.USER_TYPE_SHIPPER)) {
+                                                                // local record user message
+                                                                UserService.saveObject(FrameActivity.this, Prefs.PREF_KEY_USER, User.getInstance());
+                                                            } else {
+                                                                Toast.makeText(FrameActivity.this, UserService.getErrorMsg(jsonObject),
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError volleyError) {
+                                                        Log.e(FrameActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                                        Toast.makeText(FrameActivity.this, FrameActivity.this.getResources().getString(R.string.network_error),
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }, params);
+
+                                        requestQueue.add(request);
+                                    } else {
+                                        UserService.tokenInvalid(FrameActivity.this, true);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.e(FrameActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                Toast.makeText(FrameActivity.this, FrameActivity.this.getResources().getString(R.string.network_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }, params);
+                requestQueue.add(request);
+            } else {
+                UserService.tokenInvalid(FrameActivity.this, false);
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package cn.edu.nju.software.tongbaoshipper.View.Adapter;
+package cn.edu.nju.software.tongbaoshipper.view.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,8 +16,8 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import java.util.List;
 
 import cn.edu.nju.software.tongbaoshipper.R;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.AddAddressActivity;
-import cn.edu.nju.software.tongbaoshipper.View.Activity.ChangeAddressActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.AddAddressActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.ChangeAddressActivity;
 
 public class PoiInfoAdapter extends BaseAdapter implements AdapterView.OnItemClickListener{
 
