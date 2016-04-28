@@ -40,7 +40,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="pcNttBggMqTY2w9FSZOgSzcaqe9CojTi" />
+            android:value="pdw1TpvZZTP5D5CPbPPuF2po1YDMPInT" />
 
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data
@@ -217,6 +217,29 @@
         <activity
             android:name=".view.activity.AddDriverActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".view.activity.DatePickerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.AllTruckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.AddressFromActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.AddressToActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.RunningOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.WaitingOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.HistoryOrderActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
