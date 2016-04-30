@@ -12,15 +12,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.sevenheaven.segmentcontrol.OnRefreshListener;
 import com.sevenheaven.segmentcontrol.RefreshListView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.edu.nju.software.tongbaoshipper.common.Order;
 import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
 import cn.edu.nju.software.tongbaoshipper.view.activity.WaitingOrderActivity;
 import cn.edu.nju.software.tongbaoshipper.view.adapter.OrderListAdapter;
@@ -93,21 +106,69 @@ public class WaitingOrderTab extends Fragment implements OnRefreshListener
         }
     }
 
+
+
+    private void refreshOrderList()
+    {
+        requestQueue= Volley.newRequestQueue(getContext());
+        System.out.println("继续刷新订单");
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+        Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_SHOW_MY_ORDER_LIST,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        Log.d(getContext().getClass().getName(), jsonObject.toString());
+                        try {
+                            if (ShipperService.getResult(jsonObject)) {
+                                System.out.println("sdsdsd");
+
+                                System.out.println(jsonObject);
+
+                                System.out.println("Refresh Waiting");
+                                orderList=ShipperService.getOrderList(jsonObject);
+                                System.out.println("一共" + orderList.size() + "条记录");
+                                if (orderList!=null)
+                                {
+                                    if (orderList.size()<1) emptyView.setVisibility(View.VISIBLE);
+                                    else  emptyView.setVisibility(View.INVISIBLE);
+                                    adapter = new OrderListAdapter(getContext(),orderList,rListView);
+                                    rListView.setAdapter(adapter);
+                                }
+                                else  emptyView.setVisibility(View.INVISIBLE);
+
+
+                            } else {
+                                Toast.makeText(getContext(), ShipperService.getErrorMsg(jsonObject),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e(getContext().getClass().getName(), volleyError.getMessage(), volleyError);
+                        // http authentication 401
+//                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
+//                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                            return;
+//                        }
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.network_error),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }, params);
+        requestQueue.add(request);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         // 初始化用户常用地址信息
-        orderList=ShipperService.getWaitingOrder();
-        if (orderList!=null)
-        {
-            if (orderList.size()<1) emptyView.setVisibility(View.VISIBLE);
-            else  emptyView.setVisibility(View.INVISIBLE);
-            adapter = new OrderListAdapter(getContext(),orderList,rListView);
-            rListView.setAdapter(adapter);
-        }
-        else  emptyView.setVisibility(View.INVISIBLE);
-
-
+        refreshOrderList();
     }
 
 
@@ -129,14 +190,13 @@ public class WaitingOrderTab extends Fragment implements OnRefreshListener
         rListView = (RefreshListView) view.findViewById(R.id.waiting_order_lv);
         emptyView = (LinearLayout) view.findViewById(R.id.waiting_order_empty);
 
-
         rListView.setOnRefreshListener(this);
 
         rListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), WaitingOrderActivity.class);
-                intent.putExtra("id", id);
+                intent.putExtra("id", id+"");
                 startActivity(intent);
 
             }

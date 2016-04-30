@@ -1,5 +1,7 @@
 package cn.edu.nju.software.tongbaoshipper.view.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +52,7 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
 
     private Order order;
     private LinearLayout btn_back,btn_cancel,btn_ok;
-
+    String orderid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +67,11 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
     public void onResume() {
         super.onResume();
         // 初始化用户常用地址信息
+
+
         Intent intent=getIntent();
-        String orderid=intent.getStringExtra("id");
+        orderid=intent.getStringExtra("id");
+        System.out.println(orderid+"号订单获取信息");
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
         params.put("id", orderid);
@@ -78,6 +83,8 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
                         Log.d(WaitingOrderActivity.class.getName(), jsonObject.toString());
                         try {
                             if (ShipperService.getResult(jsonObject)) {
+                                System.out.println("开始解析订单");
+
                                 order=ShipperService.getDetailOrder(jsonObject);
 
                                 if (order.getState()==4)
@@ -152,6 +159,9 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
         btn_back=(LinearLayout) findViewById(R.id.order_detail_btn_back);
 
         btn_back.setOnClickListener(this);
+        btn_ok.setOnClickListener(this);
+        btn_cancel.setOnClickListener(this);
+
 
         order_state.setText("订单已付款，等待司机接单");
         order_id.setText(order.getId()+"");
@@ -166,11 +176,10 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
         StringBuilder sb=new StringBuilder();
         for (int i:order.getTruckTypes())
             sb.append(ShipperService.getAllTruckType(WaitingOrderActivity.this).get(i).getTruckType()+" ");
-        sb.append(order.getPrice() + "元");
         truck_type.setText(sb.toString());
 
         cancel_tv.setText("取消订单");
-        ok_tv.setText("拆分订单");
+        ok_tv.setText("再来一单");
 
 
 
@@ -179,6 +188,10 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
+        AlertDialog.Builder builder;
+        AlertDialog dialog;
+        View dialogView;
+        TextView dialogText;
         switch(v.getId()) {
             case R.id.order_detail_btn_back:
                 Log.d(WaitingOrderActivity.class.getName(), "back");
@@ -187,9 +200,71 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
             case R.id.order_detail_btn_cancel:
                 Log.d(WaitingOrderActivity.class.getName(), "cancel order");
 
+                builder = new AlertDialog.Builder(this);
+                dialogView=(getLayoutInflater().inflate(R.layout.dialog_item_confirm,null));
+                dialogText=(TextView)dialogView.findViewById(R.id.dialog_confirm_text);
+                dialogText.setText("确认取消订单 ？");
+                builder.setView(dialogView);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 执行点击确定按钮的业务逻辑
+                        Map<String, String> params = new HashMap<>();
+                        params.put("token", User.getInstance().getToken());
+                        params.put("id", orderid);
+
+                        Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_CANCEL_ORDER,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject jsonObject) {
+                                        Log.d(WaitingOrderActivity.class.getName(), jsonObject.toString());
+                                        try {
+                                            if (ShipperService.getResult(jsonObject)) {
+
+                                                Toast.makeText(WaitingOrderActivity.this, "订单已提交取消请求",
+                                                        Toast.LENGTH_SHORT).show();
+
+
+                                            } else {
+                                                Toast.makeText(WaitingOrderActivity.this, ShipperService.getErrorMsg(jsonObject),
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError volleyError) {
+                                        Log.e(AllTruckActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                        // http authentication 401
+//                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
+//                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                            return;
+//                        }
+                                        Toast.makeText(WaitingOrderActivity.this, WaitingOrderActivity.this.getResources().getString(R.string.network_error),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }, params);
+                        requestQueue.add(request);
+
+
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 执行点击取消按钮的业务逻辑
+                    }
+                });
+                dialog = builder.create();
+                dialog.show();
+
                 break;
             case R.id.order_detail_btn_ok:
-                Log.d(WaitingOrderActivity.class.getName(), "finish order");
+                Log.d(WaitingOrderActivity.class.getName(), "another order");
 
                 break;
             default:

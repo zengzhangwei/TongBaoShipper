@@ -161,6 +161,11 @@ public class Net {
     /**
      * 删除订单，注意这里并不是真正删除，只是设置对其不可见
      */
+
+    public static final String URL_SHIPPER_DELETE_ORDER = URL_PREFIX + "/shipper/auth/deleteOrder";
+    /**
+     * 取消订单
+     */
     public static final String URL_SHIPPER_CANCEL_ORDER = URL_PREFIX + "/shipper/auth/cancelOrder";
     /**
      * 结束订单

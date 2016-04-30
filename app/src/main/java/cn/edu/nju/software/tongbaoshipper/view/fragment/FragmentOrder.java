@@ -64,76 +64,79 @@ public class FragmentOrder extends Fragment {
         this.context = context;
     }
 
+    @Override public void onResume(){
+        super.onResume();
+        if (User.isLogin()) {
+            WaitingOrderTab tab01 = new WaitingOrderTab();
+            RunningOrderTab tab02 = new RunningOrderTab();
+            HistoryOrderTab tab03 = new HistoryOrderTab();
+            mFragments.add(tab01);
+            mFragments.add(tab02);
+            mFragments.add(tab03);
+
+
+            mAdapter = new FragmentPagerAdapter(getChildFragmentManager())
+            {
+                @Override
+                public int getCount()
+                {
+                    return mFragments.size();
+                }
+
+                @Override
+                public Fragment getItem(int arg0)
+                {
+                    return mFragments.get(arg0);
+                }
+            };
+
+            mViewPager.setAdapter(mAdapter);
+            mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+                @Override
+                public void onPageSelected(int position) {
+
+                    selectbutton.setSelectedIndex(position);
+                }
+
+                @Override
+                public void onPageScrolled(int arg0, float arg1, int arg2) {
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int arg0) {
+                }
+            });
+            selectbutton.setOnSegmentControlClickListener(new OnSegmentControlClickListener() {
+                @Override
+                public void onSegmentControlClick(int index) {
+                    mViewPager.setCurrentItem(index);
+                }
+            });
+            selectbutton.setSelectedIndex(1);
+            mViewPager.setCurrentItem(1);
+
+        } else {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        }
+    }
 
 
 
 
-
-    private void initView(View view)
+    private void initView(final View view)
     {
         Log.i(this.getClass().getName(), "init view");
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         selectbutton =(SegmentControl) view.findViewById(R.id.segment_control);
 
-
-        selectbutton.setOnSegmentControlClickListener(new OnSegmentControlClickListener() {
-            @Override
-            public void onSegmentControlClick(int index) {
-                mViewPager.setCurrentItem(index);
-            }
-        });
-        selectbutton.setSelectedIndex(1);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = View.inflate(context, R.layout.fragment_order, null);
         initView(view);
-        ShipperService.refreshOrderList(getActivity());
-        WaitingOrderTab tab01 = new WaitingOrderTab();
-        RunningOrderTab tab02 = new RunningOrderTab();
-        HistoryOrderTab tab03 = new HistoryOrderTab();
-        mFragments.add(tab01);
-        mFragments.add(tab02);
-        mFragments.add(tab03);
-
-
-        mAdapter = new FragmentPagerAdapter(getChildFragmentManager())
-        {
-            @Override
-            public int getCount()
-            {
-                return mFragments.size();
-            }
-
-            @Override
-            public Fragment getItem(int arg0)
-            {
-                return mFragments.get(arg0);
-            }
-        };
-
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
-
-            private int currentIndex;
-
-            @Override
-            public void onPageSelected(int position) {
-
-                ((SegmentControl) view.findViewById(R.id.segment_control)).setSelectedIndex(position);
-                currentIndex = position;
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
-        mViewPager.setCurrentItem(1);
         return view;
     }
 

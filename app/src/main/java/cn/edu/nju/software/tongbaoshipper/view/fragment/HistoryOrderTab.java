@@ -11,15 +11,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.sevenheaven.segmentcontrol.OnRefreshListener;
 import com.sevenheaven.segmentcontrol.RefreshListView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.edu.nju.software.tongbaoshipper.common.Order;
 import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
+import cn.edu.nju.software.tongbaoshipper.common.User;
+import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
 import cn.edu.nju.software.tongbaoshipper.view.activity.HistoryOrderActivity;
 import cn.edu.nju.software.tongbaoshipper.view.adapter.OrderListAdapter;
@@ -72,7 +85,6 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
             @Override
             protected void onPostExecute(Void result) {
                 adapter.notifyDataSetChanged();
-
                 // 控制脚布局隐藏
                 rListView.hideFooterView();
             }
@@ -85,19 +97,72 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
         if (isVisibleToUser) {
             //相当于Fragment的onResume
 
-            orderList=ShipperService.getHistoryOrder();
-            if (orderList!=null)
-            {
-                if (orderList.size()<1) emptyView.setVisibility(View.VISIBLE);
-                else  emptyView.setVisibility(View.INVISIBLE);
-
-            }
-
-            adapter = new OrderListAdapter(getContext(),orderList,rListView);
-            rListView.setAdapter(adapter);
         } else {
             //相当于Fragment的onPause
         }
+    }
+
+
+    private void refreshOrderList()
+    {
+        System.out.println("继续刷新订单");
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+        Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_SHOW_MY_ORDER_LIST,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        System.out.println("sdsdsd");
+
+                        Log.d(getContext().getClass().getName(), jsonObject.toString());
+                        try {
+                            if (ShipperService.getResult(jsonObject)) {
+
+                                System.out.println(jsonObject);
+                                System.out.println("Refresh History");
+                                orderList=ShipperService.getOrderList(jsonObject);
+                                if (orderList!=null)
+                                {
+                                    if (orderList.size()<1) emptyView.setVisibility(View.VISIBLE);
+                                    else  emptyView.setVisibility(View.INVISIBLE);
+                                    adapter = new OrderListAdapter(getContext(),orderList,rListView);
+                                    rListView.setAdapter(adapter);
+                                }
+                                else  emptyView.setVisibility(View.INVISIBLE);
+                                System.out.println("一共" + orderList.size() + "条记录");
+                            } else {
+                                Toast.makeText(getContext(), ShipperService.getErrorMsg(jsonObject),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e(getContext().getClass().getName(), volleyError.getMessage(), volleyError);
+                        // http authentication 401
+//                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
+//                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                            return;
+//                        }
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.network_error),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }, params);
+        requestQueue.add(request);
+    }
+
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        refreshOrderList();
+
     }
 
     @Override
@@ -105,7 +170,7 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
     {
 
         View view =inflater.inflate(R.layout.fragment_orderhistory, container, false);
-
+        requestQueue= Volley.newRequestQueue(getContext());
         initView(view);
         return  view;
     }
@@ -117,14 +182,6 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
         rListView = (RefreshListView) view.findViewById(R.id.history_order_lv);
         emptyView = (LinearLayout) view.findViewById(R.id.history_order_empty);
 
-        orderList= new ArrayList<Order>();
-        if (orderList!=null)
-        {
-            if (orderList.size()<1) emptyView.setVisibility(View.VISIBLE);
-            else  emptyView.setVisibility(View.INVISIBLE);
-
-        }
-        adapter = new OrderListAdapter(getContext(),orderList,rListView);
         rListView.setAdapter(adapter);
         rListView.setOnRefreshListener(this);
 
@@ -132,7 +189,7 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent=new Intent(getActivity(), HistoryOrderActivity.class);
-                intent.putExtra("id",id);
+                intent.putExtra("id",id+"");
                 startActivity(intent);
 
             }

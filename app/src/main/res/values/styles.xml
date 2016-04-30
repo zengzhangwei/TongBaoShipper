@@ -8,7 +8,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="Theme.picker" parent="AppTheme">
+        <item name="android:editTextStyle">@style/Widget.EditText.Blue</item>
+    </style>
 
+    <style name="Widget.EditText.Blue" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/font_blue</item>
+    </style>
     <!--title theme-->
     <style name="title_font">
         <item name="android:textSize">@dimen/title_text_size</item>

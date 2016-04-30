@@ -22,8 +22,10 @@ import java.util.Locale;
 
 import cn.edu.nju.software.tongbaoshipper.common.Account;
 import cn.edu.nju.software.tongbaoshipper.common.Banner;
+import cn.edu.nju.software.tongbaoshipper.common.Driver;
 import cn.edu.nju.software.tongbaoshipper.common.Message;
 import cn.edu.nju.software.tongbaoshipper.common.MonthlyAccount;
+import cn.edu.nju.software.tongbaoshipper.common.Order;
 import cn.edu.nju.software.tongbaoshipper.common.User;
 import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.constant.Prefs;
@@ -195,9 +197,22 @@ public class UserService {
     public static boolean getContacts(JSONObject jsonObject) {
         return false;
     }
-
     public static boolean getContactDetail(JSONObject jsonObject) {
         return false;
+    }
+
+
+    public static Driver getDriverDetail(JSONObject jsonObject) throws JSONException {
+        Driver driver=new Driver();
+
+        if (getResult(jsonObject)) {
+            JSONObject object = jsonObject.getJSONObject("data");
+            //TODO complete
+            driver.setId(object.getInt("id"));
+            driver.setNickName(object.getString("nickName"));
+            driver.setNickName(object.getString("phoneNum"));
+        }
+        return driver;
     }
 
 

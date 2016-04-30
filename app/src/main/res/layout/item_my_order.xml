@@ -29,8 +29,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+
                     android:text="订单号 ："
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -50,6 +49,7 @@
                     android:layout_marginLeft="@dimen/item_address_btn_margin"
                     android:layout_marginStart="@dimen/item_address_btn_margin"
                     android:text="312324199502051451"
+                    android:maxLines="1"
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
             </LinearLayout>
@@ -67,8 +67,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+
                     android:text="起点 ："
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -88,6 +87,7 @@
                     android:layout_marginLeft="@dimen/item_address_btn_margin"
                     android:layout_marginStart="@dimen/item_address_btn_margin"
                     android:text="南京大学仙林校区"
+                    android:maxLines="1"
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
             </LinearLayout>
@@ -105,8 +105,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+
                     android:text="终点 ："
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -124,6 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/item_address_btn_margin"
+                    android:maxLines="1"
                     android:layout_marginStart="@dimen/item_address_btn_margin"
                     android:text="南京大学鼓楼校区（汉口路22号）"
                     android:textColor="@color/font_somber"
@@ -144,8 +144,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+
                     android:text="装车时间 ："
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -182,8 +181,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+
                     android:text="下单时间 ："
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -221,8 +219,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+
                     android:text="货车类型 ："
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -242,6 +239,7 @@
                     android:layout_marginLeft="@dimen/item_address_btn_margin"
                     android:layout_marginStart="@dimen/item_address_btn_margin"
                     android:text="金杯车+依维柯 王司机 15161212788"
+                    android:maxLines="1"
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
             </LinearLayout>

@@ -204,6 +204,7 @@
                             android:layout_marginStart="@dimen/item_address_btn_margin"
                             android:text="南京大学仙林校区"
                             android:textColor="@color/font_somber"
+                            android:maxLines="1"
                             android:textSize="@dimen/item_address_btn_tv_size" />
                     </LinearLayout>
                 </LinearLayout>
@@ -280,6 +281,7 @@
                             android:layout_marginLeft="@dimen/item_address_btn_margin"
                             android:layout_marginStart="@dimen/item_address_btn_margin"
                             android:text="南京大学鼓楼校区（汉口路22号）"
+                            android:maxLines="1"
                             android:textColor="@color/font_somber"
                             android:textSize="@dimen/item_address_btn_tv_size" />
                     </LinearLayout>

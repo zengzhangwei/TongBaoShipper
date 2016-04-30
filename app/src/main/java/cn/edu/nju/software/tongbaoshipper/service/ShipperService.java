@@ -29,9 +29,7 @@ import cn.edu.nju.software.tongbaoshipper.common.DriverPosition;
 import cn.edu.nju.software.tongbaoshipper.common.Order;
 import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
 import cn.edu.nju.software.tongbaoshipper.common.Truck;
-import cn.edu.nju.software.tongbaoshipper.common.User;
 import cn.edu.nju.software.tongbaoshipper.constant.Net;
-import cn.edu.nju.software.tongbaoshipper.view.fragment.RunningOrderTab;
 
 public class ShipperService {
 
@@ -361,74 +359,6 @@ public class ShipperService {
         }
         return driverPositions;
 
-    }
-
-    public static void refreshOrderList(final Context context)
-    {
-        RequestQueue requestQueue= Volley.newRequestQueue(context);
-        System.out.println("继续刷新订单");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("token", User.getInstance().getToken());
-        Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_SHOW_MY_ORDER_LIST,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        Log.d(context.getClass().getName(), jsonObject.toString());
-                        try {
-                            if (ShipperService.getResult(jsonObject)) {
-                                System.out.println(jsonObject);
-
-                                System.out.println("Refresh");
-                                allOrder = new ArrayList<Order>();
-                                allOrder.add(getTestOrder());
-                                allOrder.add(getTestOrder());
-                                allOrder.add(getTestOrder());
-                                runningOrder=allOrder;
-                                waitingOrder=allOrder;
-                                historyOrder=new ArrayList<Order>();
-
-                                System.out.println("VVVVV" + allOrder.size() + "XXX");
-
-                            } else {
-                                Toast.makeText(context, ShipperService.getErrorMsg(jsonObject),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Log.e(context.getClass().getName(), volleyError.getMessage(), volleyError);
-                        // http authentication 401
-//                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
-//                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
-//                            startActivity(intent);
-//                            return;
-//                        }
-                        Toast.makeText(context, context.getResources().getString(R.string.network_error),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }, params);
-        requestQueue.add(request);
-    }
-
-    public static ArrayList<Order> getRunningOrder()
-    {
-        return runningOrder;
-    }
-
-    public static ArrayList<Order> getWaitingOrder()
-    {
-        return waitingOrder;
-    }
-
-    public static ArrayList<Order> getHistoryOrder()
-    {
-        return historyOrder;
     }
 
 

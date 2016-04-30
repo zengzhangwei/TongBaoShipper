@@ -261,7 +261,7 @@
                     <TextView
                         android:layout_width="200dp"
                         android:layout_height="20dp"
-                        android:layout_marginLeft="25dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:text="优先发送给常用司机"
                         android:textColor="@color/font_black" />
@@ -297,7 +297,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
-                        android:text="行车路程共 100 公里"
+                        android:text="行车路程共 0 公里"
                         android:textColor="@color/font_black"
                         />
                     <TextView
@@ -307,9 +307,10 @@
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="5dp"
-                        android:text="运费共 250 元"
+                        android:text="运费共 0 元"
                         android:textColor="@color/font_black"
                         />
+
                 </RelativeLayout>
             </LinearLayout>
 

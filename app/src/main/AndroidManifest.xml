@@ -207,6 +207,7 @@
 
         <activity
             android:name=".view.activity.PlaceOrderActivity"
+            android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.ChangeAddressActivity"
@@ -220,6 +221,7 @@
 
         <activity
             android:name=".view.activity.DatePickerActivity"
+            android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.AllTruckActivity"
@@ -232,12 +234,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.RunningOrderActivity"
+            android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.WaitingOrderActivity"
+            android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.HistoryOrderActivity"
+            android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
 
     </application>

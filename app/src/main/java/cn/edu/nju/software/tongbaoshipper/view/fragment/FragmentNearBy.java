@@ -44,6 +44,7 @@ import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
 import cn.edu.nju.software.tongbaoshipper.service.UserService;
 import cn.edu.nju.software.tongbaoshipper.view.activity.LoginActivity;
+import cn.edu.nju.software.tongbaoshipper.view.activity.UserActivity;
 
 /**
  * Created by MoranHe on 2016/1/13.
@@ -53,7 +54,7 @@ public class FragmentNearBy extends Fragment {
     private Context context;
     private MapView mvMap;
     private ArrayList<LatLng> driverpositions;
-    private ArrayList<Driver> drivername;
+    private ArrayList<Driver> driverID;
     private ArrayList<DriverPosition> allList;
     private BaiduMap baiduMap;
     private PopupWindow popupWindow;
@@ -86,17 +87,23 @@ public class FragmentNearBy extends Fragment {
                             Log.d(getActivity().getClass().getName(), jsonObject.toString());
                             try {
                                 if (ShipperService.getResult(jsonObject)) {
-                                    System.out.println("VVVVV");
+                                    System.out.println("司机列表");
                                     System.out.println(jsonObject);
                                     allList  = ShipperService.getDriverPositionList(jsonObject);
                                     splitDriverPosition();
+                                    baiduMap=mvMap.getMap();
+                                    mvMap.showZoomControls(false);
+                                    mvMap.showScaleControl(false);
+                                    overlay=new DriverOverlay(baiduMap);
                                     overlay.setData(driverpositions);
                                     overlay.addToMap();
                                     overlay.zoomToSpan();
-                                    System.out.println("VVVVV"+allList.size()+"XXX");
+                                    baiduMap.setOnMarkerClickListener(overlay);
+
+                                    System.out.println("一共"+allList.size()+"条记录");
 
                                 } else {
-                                    Toast.makeText(getActivity(), UserService.getErrorMsg(jsonObject),
+                                    Toast.makeText(getActivity(), ShipperService.getErrorMsg(jsonObject),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
@@ -129,11 +136,11 @@ public class FragmentNearBy extends Fragment {
     private void splitDriverPosition()
     {
         driverpositions=new ArrayList<LatLng>();
-        drivername=new ArrayList<Driver>();
+        driverID=new ArrayList<Driver>();
         for (DriverPosition dp:allList)
         {
             driverpositions.add(dp.getPosition());
-            drivername.add(dp.getDriver());
+            driverID.add(dp.getDriver());
         }
 
     }
@@ -142,44 +149,10 @@ public class FragmentNearBy extends Fragment {
     {
 
         mvMap = (MapView) view.findViewById(R.id.nearby_map);
-        mvMap.showZoomControls(false);
-        mvMap.showScaleControl(false);
-        driverpositions=new ArrayList<LatLng>();
-        LatLng llA = new LatLng(33.963175, 116.400244);
-        LatLng llB = new LatLng(33.942821, 116.369199);
-        LatLng llC = new LatLng(33.939723, 116.425541);
-        LatLng llD = new LatLng(33.906965, 116.401394);
-        driverpositions.add(llA);
-        driverpositions.add(llB);
-        driverpositions.add(llC);
-        driverpositions.add(llD);
-        drivername=new ArrayList<Driver>();
-
-        String name[]={"高健","邹源","菠萝","若曦"};
-
-        for (String s:name)
-        {
-            Driver driver=new Driver();
-            driver.setNickName(s);
-            driver.setPhoneNum("1233-233-2323");
-            drivername.add(driver);
-        }
-
-        baiduMap=mvMap.getMap();
-
-        overlay=new DriverOverlay(baiduMap);
-
-        baiduMap.setOnMarkerClickListener(overlay);
-
-        overlay.setData(driverpositions);
-        overlay.addToMap();
-        overlay.zoomToSpan();
-
-
 
     }
 
-    private void showPopWindow(Driver driver) {
+    private void showPopWindow(final int id) {
         if (popupWindow != null && popupWindow.isShowing()) {
             return;
         }
@@ -215,7 +188,6 @@ public class FragmentNearBy extends Fragment {
         btn_add_driver=(LinearLayout) view.findViewById(R.id.add_driver_btn);
         btn_add_driver=(LinearLayout) view.findViewById(R.id.contact_driver_btn);
 
-        driverinfo_tv.setText(driver.getId()+"司机： "+driver.getNickName()+" "+driver.getPhoneNum());
 
         btn_cancel_pop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,6 +201,45 @@ public class FragmentNearBy extends Fragment {
         });
 
 
+        Map<String, String> paramsdetail = new HashMap<>();
+        paramsdetail.put("token", User.getInstance().getToken());
+        paramsdetail.put("id",id+"");
+        Request<JSONObject> request = new PostRequest(Net.URL_USER_GET_CONTACT_DETAIL,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        Log.d(getActivity().getClass().getName(), jsonObject.toString());
+                        try {
+                            if (UserService.getResult(jsonObject)) {
+                                Driver driver=UserService.getDriverDetail(jsonObject);
+                                driverinfo_tv.setText(driver.getId() + "司机： " + driver.getNickName() + " " + driver.getPhoneNum());
+
+
+                            } else {
+                                Toast.makeText(getActivity(), UserService.getErrorMsg(jsonObject),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e(getActivity().getClass().getName(), volleyError.getMessage(), volleyError);
+                        // http authentication 401
+//                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
+//                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                            return;
+//                        }
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }, paramsdetail);
+        requestQueue.add(request);
+
     }
 
     private class DriverOverlay extends MarkerListOverlay
@@ -241,10 +252,10 @@ public class FragmentNearBy extends Fragment {
         public boolean onListMarkerClick(int index) {
             super.onListMarkerClick(index);
 
-            showPopWindow(drivername.get(index));
-           // Toast.makeText(context, drivername.get(index)+"",
+            showPopWindow(driverID.get(index).getId());
+           // Toast.makeText(context, driverID.get(index)+"",
               //      Toast.LENGTH_SHORT).show();
-            System.out.println(drivername.get(index).getNickName());
+            System.out.println(driverID.get(index).getId()+"号司机");
 
             return false;
         }

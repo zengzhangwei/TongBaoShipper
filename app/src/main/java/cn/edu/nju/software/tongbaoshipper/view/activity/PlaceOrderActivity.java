@@ -1,5 +1,7 @@
 package cn.edu.nju.software.tongbaoshipper.view.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -222,8 +224,32 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             return false;
         }
     }
+
+    private String getTruckArray()
+    {
+        String s="["+arrTruck.get(0).getId();
+        for(int i=1;i<arrTruck.size();i++)
+        {
+            s+=","+arrTruck.get(i).getId();
+        }
+        s+="]";
+        return s;
+    }
+
+    private boolean checkOrderInfo()
+    {
+        if (date_input.length()*start_point_input.length()*arrive_point_input.length()*arrTruck.size()==0)
+            return false;
+        else
+            return true;
+    }
+
     @Override
     public void onClick(View v) {
+        AlertDialog.Builder builder;
+        AlertDialog dialog;
+        View dialogView;
+        TextView dialogText;
         switch(v.getId()) {
             case R.id.place_order_btn_back:
                 Log.d(PlaceOrderActivity.class.getName(), "back");
@@ -237,73 +263,102 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.place_order_truck_btn:
                 Log.d(PlaceOrderActivity.class.getName(), "place order");
-                Map<String, String> params = new HashMap<>();
-                params.put("token", User.getInstance().getToken());
-                params.put("addressFrom", startaddress);
-                params.put("addressFromLat", startlat+"");
-                params.put("addressFromLng", startlng+"");
-                params.put("addressTo", arriveaddress);
-                params.put("addressToLat", arrivelat+"");
-                params.put("addressToLng", arrivelng+"");
-                params.put("fromContactName",startname);
-                params.put("fromContactPhone", startphone);
-                params.put("toContactName", arrivename);
-                params.put("toContactPhone", arrivephone);
-                params.put("loadTime", date_input.getText().toString());
-                params.put("goodsType", "goodsType");
-                params.put("goodsWeight", "goodsWeight");
-                params.put("goodsSize", "goodsSize");
-                String s=arrTruck.get(0).getId()+"";
-                for(int i=1;i<arrTruck.size();i++)
-                {
-                    s+=","+arrTruck.get(i).getId();
-                }
 
-                params.put("truckTypes", "1");
-                params.put("remark", "remark");
-                params.put("payType", "0");
-                params.put("price", price+"");
-
-                System.out.println(params);
+                if (checkOrderInfo()){
 
 
+                    builder = new AlertDialog.Builder(this);
+                    dialogView=(getLayoutInflater().inflate(R.layout.dialog_item_confirm,null));
+                    dialogText=(TextView)dialogView.findViewById(R.id.dialog_confirm_text);
+                    dialogText.setText("确认下单 ？");
+                    builder.setView(dialogView);
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 执行点击确定按钮的业务逻辑
+                            Map<String, String> params = new HashMap<>();
+                            params.put("token", User.getInstance().getToken());
+                            params.put("addressFrom",startaddress);
+                            params.put("addressFromLat", startlat+"");
+                            params.put("addressFromLng", startlng+"");
+                            params.put("addressTo", arriveaddress);
+                            params.put("addressToLat", arrivelat+"");
+                            params.put("addressToLng", arrivelng+"");
+                            params.put("fromContactName",startname);
+                            params.put("fromContactPhone", startphone);
+                            params.put("toContactName", arrivename);
+                            params.put("toContactPhone", arrivephone);
+                            params.put("loadTime", date_input.getText().toString());
+                            params.put("goodsType", "1");
+                            params.put("goodsWeight", "1");
+                            params.put("goodsSize", "1");
+                            params.put("truckTypes", getTruckArray());
+                            params.put("remark", "remark");
+                            params.put("payType", "0");
+                            params.put("price", price+"");
 
-                Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_PLACE_ORDER,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject jsonObject) {
-                                Log.d(PlaceOrderActivity.class.getName(), jsonObject.toString());
-                                try {
-                                    if (ShipperService.placeOrder(jsonObject)) {
-                                        System.out.println("OOOXXXX");
-                                        Toast.makeText(PlaceOrderActivity.this, "下单成功",
-                                                Toast.LENGTH_SHORT).show();
-                                        // 添加成功自动关闭
-                                        finish();
-                                    } else {
-                                        Toast.makeText(PlaceOrderActivity.this, ShipperService.getErrorMsg(jsonObject),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                Log.e(PlaceOrderActivity.class.getName(), volleyError.getMessage(), volleyError);
-                                //http authentication 401
+                            System.out.println(params);
+
+
+
+                            Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_PLACE_ORDER,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject jsonObject) {
+                                            Log.d(PlaceOrderActivity.class.getName(), jsonObject.toString());
+                                            try {
+                                                if (ShipperService.placeOrder(jsonObject)) {
+                                                    System.out.println("下单成功");
+                                                    Toast.makeText(PlaceOrderActivity.this, "下单成功",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    // 添加成功自动关闭
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(PlaceOrderActivity.this, ShipperService.getErrorMsg(jsonObject),
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError volleyError) {
+                                            Log.e(PlaceOrderActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                            //http authentication 401
 //                                if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
 //                                    Intent intent = new Intent(UserActivity.this, LoginActivity.class);
 //                                    startActivity(intent);
 //                                    return;
 //                                }
-                                Toast.makeText(PlaceOrderActivity.this, PlaceOrderActivity.this.getResources().getString(R.string.network_error),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }, params);
-                requestQueue.add(request);
+                                            Toast.makeText(PlaceOrderActivity.this, PlaceOrderActivity.this.getResources().getString(R.string.network_error),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }, params);
+                            requestQueue.add(request);
+
+
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 执行点击取消按钮的业务逻辑
+                        }
+                    });
+                    dialog = builder.create();
+                    dialog.show();
+
+
+
+                }
+                else    {
+
+                    Toast.makeText(PlaceOrderActivity.this, "请填写完整的订单信息",
+                            Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             default:
                 Log.e(PlaceOrderActivity.class.getName(), "Unknown id");

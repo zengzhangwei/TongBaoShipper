@@ -89,7 +89,6 @@ public class AddressFromActivity extends AppCompatActivity implements
                 keyWorldsView.setText(addressList.get(position).name + " " + addressList.get(position).address);
                 longitude=addressList.get(position).location.longitude;
                 latitude=addressList.get(position).location.latitude;
-                Toast.makeText(AddressFromActivity.this, longitude+"*"+latitude, Toast.LENGTH_SHORT) .show();
             }
         });
         /**

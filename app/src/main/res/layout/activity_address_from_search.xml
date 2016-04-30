@@ -123,7 +123,7 @@
                 android:layout_toEndOf="@+id/add_address_iv_contact"
                 android:layout_toRightOf="@+id/add_address_iv_contact"
                 android:background="@null"
-                android:hint="@string/add_address_hint_contact"
+                android:hint="请输入联系人姓名"
                 android:inputType="text"
                 android:selectAllOnFocus="true" />
         </RelativeLayout>

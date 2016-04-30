@@ -60,10 +60,13 @@ public class AllTruckActivity extends AppCompatActivity implements View.OnClickL
 
         allList  = ShipperService.getAllTruckType(AllTruckActivity.this);
 
-        if (allList==null||allList.size()==0)
+        if (allList==null)
             vEmpty.setVisibility(View.VISIBLE);
-        allTruckAdapter = new AllTruckAdapter(AllTruckActivity.this, allList, lvTruck);
-        lvTruck.setAdapter(allTruckAdapter);
+        else {
+            allTruckAdapter = new AllTruckAdapter(AllTruckActivity.this, allList, lvTruck);
+            lvTruck.setAdapter(allTruckAdapter);
+        }
+
         lvTruck.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
