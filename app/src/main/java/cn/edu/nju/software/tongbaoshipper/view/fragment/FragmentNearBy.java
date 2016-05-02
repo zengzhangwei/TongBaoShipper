@@ -1,9 +1,11 @@
 package cn.edu.nju.software.tongbaoshipper.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -61,8 +63,8 @@ public class FragmentNearBy extends Fragment {
     private TextView driverinfo_tv;
     private LinearLayout btn_add_driver,btn_contact_driver,btn_cancel_pop;
     private RequestQueue requestQueue;
-
     private DriverOverlay overlay;
+    private String phoneNum;
 
     public FragmentNearBy() {
         super();
@@ -153,6 +155,9 @@ public class FragmentNearBy extends Fragment {
     }
 
     private void showPopWindow(final int id) {
+
+
+
         if (popupWindow != null && popupWindow.isShowing()) {
             return;
         }
@@ -186,7 +191,7 @@ public class FragmentNearBy extends Fragment {
         driverinfo_tv =(TextView) view.findViewById(R.id.driver_info_tv);
         btn_cancel_pop=(LinearLayout) view.findViewById(R.id.pop_driver_btn_cancel);
         btn_add_driver=(LinearLayout) view.findViewById(R.id.add_driver_btn);
-        btn_add_driver=(LinearLayout) view.findViewById(R.id.contact_driver_btn);
+        btn_contact_driver=(LinearLayout) view.findViewById(R.id.contact_driver_btn);
 
 
         btn_cancel_pop.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +204,63 @@ public class FragmentNearBy extends Fragment {
                 }
             }
         });
+        phoneNum="110";
+
+        btn_contact_driver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(context.getClass().getName(), "dial driver");
+                Uri telUri = Uri.parse("tel:" + phoneNum);
+                Intent intent = new Intent(Intent.ACTION_DIAL, telUri);
+                context.startActivity(intent);
+            }
+        });
+
+        btn_add_driver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(getActivity().getClass().getName(), "add driver");
+                Map<String, String> params = new HashMap<>();
+                params.put("token", User.getInstance().getToken());
+                params.put("id", String.valueOf(id));
+                Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_ADD_FREQUENT_DRIVER,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                Log.d(getActivity().getClass().getName(), jsonObject.toString());
+                                try {
+                                    if (ShipperService.addFrequentDriver(jsonObject)) {
+                                        Toast.makeText(context, context.getResources().getString(R.string.item_driver_add_success),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(context, ShipperService.getErrorMsg(jsonObject),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.e(context.getClass().getName(), volleyError.getMessage(), volleyError);
+                                //http authentication 401
+//                                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
+//                                            Intent intent = new Intent(UserActivity.this, LoginActivity.class);
+//                                            startActivity(intent);
+//                                            return;
+//                                        }
+                                Toast.makeText(context, context.getResources().getString(R.string.network_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }, params);
+                requestQueue.add(request);
+            }
+        });
+
+
+
 
 
         Map<String, String> paramsdetail = new HashMap<>();
@@ -211,8 +273,12 @@ public class FragmentNearBy extends Fragment {
                         Log.d(getActivity().getClass().getName(), jsonObject.toString());
                         try {
                             if (UserService.getResult(jsonObject)) {
+                                System.out.println("开始解析司机信息");
+                                System.out.println(jsonObject);
+
                                 Driver driver=UserService.getDriverDetail(jsonObject);
-                                driverinfo_tv.setText(driver.getId() + "司机： " + driver.getNickName() + " " + driver.getPhoneNum());
+                                phoneNum=driver.getPhoneNum();
+                                driverinfo_tv.setText( "司机：" + driver.getNickName() + " 号码：" + driver.getPhoneNum());
 
 
                             } else {

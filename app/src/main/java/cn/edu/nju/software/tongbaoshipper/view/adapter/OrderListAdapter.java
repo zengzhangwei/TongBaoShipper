@@ -2,6 +2,7 @@ package cn.edu.nju.software.tongbaoshipper.view.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.sevenheaven.segmentcontrol.RefreshListView;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -47,7 +50,7 @@ public class OrderListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)  {
         convertView = LayoutInflater.from(context).inflate(R.layout.item_my_order, parent, false);
         Order order = arrorder.get(position);
 
@@ -59,15 +62,29 @@ public class OrderListAdapter extends BaseAdapter {
         TextView tv_truckType = (TextView) convertView.findViewById(R.id.my_order_truckType_tv);
 
 
-        tv_orderId.setText(order.getId()+"");
+        if (order.getState()==0)
+            tv_orderId.setText(order.getId()+"（尚未被抢）");
+        if (order.getState()==1)
+            tv_orderId.setText(order.getId()+"（正在进行）");
+        if (order.getState()==2)
+            tv_orderId.setText(order.getId()+"（已经完成）");
+        if (order.getState()==3)
+            tv_orderId.setText(order.getId()+"（已经取消）");
+
         tv_fromaddress.setText(order.getAddressFrom());
         tv_toaddress.setText(order.getAddressTo());
         tv_placetime.setText(order.getPlaceTime());
         tv_loadtime.setText(order.getLoadTime());
         StringBuilder sb=new StringBuilder();
-        for (int i:order.getTruckTypes())
-            sb.append(ShipperService.getTestTruckList().get(i).getTruckType()+" ");
-        sb.append(order.getPrice()+"元");
+        try {
+            for (int i=0;i<order.getTruckTypes().length();i++)
+                sb.append(ShipperService.getAllTruckType(context).get(order.getTruckTypes().getInt(i)).getTruckType()+" ");
+            sb.append(""+order.getPrice()+"元");
+
+        }
+        catch (JSONException e){
+            Log.e(context.getClass().getName(),"货车类型解析错误",e);
+        }
         tv_truckType.setText(sb.toString());
 
 

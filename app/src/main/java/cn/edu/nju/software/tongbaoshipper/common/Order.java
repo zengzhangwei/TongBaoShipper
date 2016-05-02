@@ -1,5 +1,7 @@
 package cn.edu.nju.software.tongbaoshipper.common;
 
+import org.json.JSONArray;
+
 public class Order {
     private int id;
     private int state;
@@ -13,7 +15,7 @@ public class Order {
     private String placeTime;
     private String goodsType;
     private int goodsWeight,goodsSize;
-    private int[] truckTypes;
+    private JSONArray truckTypes;
     private String remark;
     private int payType;
     private int price;
@@ -163,11 +165,11 @@ public class Order {
         this.goodsSize = goodsSize;
     }
 
-    public int[] getTruckTypes() {
+    public JSONArray getTruckTypes() {
         return truckTypes;
     }
 
-    public void setTruckTypes(int[] truckTypes) {
+    public void setTruckTypes(JSONArray truckTypes) {
         this.truckTypes = truckTypes;
     }
 

@@ -49,6 +49,7 @@ public class AddressFromActivity extends AppCompatActivity implements
     private AutoAddressAdapter addressAdapter = null;
     private int loadIndex = 0;
 
+    private CompleteTextWatcher textwatcher;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,37 @@ public class AddressFromActivity extends AppCompatActivity implements
 
     }
 
+
+    private class CompleteTextWatcher implements TextWatcher{
+        @Override
+        public void afterTextChanged(Editable arg0) {
+
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence arg0, int arg1,
+                                      int arg2, int arg3) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence cs, int arg1, int arg2,
+                                  int arg3) {
+            if (cs.length() <= 0) {
+                return;
+            }
+            String city = ((TextView) findViewById(R.id.address_from_tv_city)).getText()
+                    .toString();
+            EditText editSearchKey = (EditText) findViewById(R.id.address_from_searchkey);
+            System.out.println("开始搜索关键字"+editSearchKey.getText().toString());
+            mPoiSearch.searchInCity((new PoiCitySearchOption()).city(city)
+                    .keyword(editSearchKey.getText().toString())
+                    .pageNum(loadIndex));
+
+        }
+    }
+
     private void initView()
     {
         keyWorldsView = (AutoCompleteTextView) findViewById(R.id.address_from_searchkey);
@@ -75,9 +107,8 @@ public class AddressFromActivity extends AppCompatActivity implements
         ok_btn.setOnClickListener(this);
 
 
-
         addressList=new ArrayList<PoiInfo>();
-        addressAdapter = new AutoAddressAdapter(AddressFromActivity.this,addressList,keyWorldsView);
+        addressAdapter = new AutoAddressAdapter(AddressFromActivity.this,addressList, keyWorldsView);
         keyWorldsView.setAdapter(addressAdapter);
         keyWorldsView.setThreshold(1);
 
@@ -85,44 +116,25 @@ public class AddressFromActivity extends AppCompatActivity implements
         keyWorldsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("hello");
+                System.out.println("选中地址");
+                keyWorldsView.removeTextChangedListener(textwatcher);
                 keyWorldsView.setText(addressList.get(position).name + " " + addressList.get(position).address);
-                longitude=addressList.get(position).location.longitude;
-                latitude=addressList.get(position).location.latitude;
+                System.out.println(addressList.get(position).name + " " + addressList.get(position).address);
+                longitude = addressList.get(position).location.longitude;
+                latitude = addressList.get(position).location.latitude;
+                keyWorldsView.addTextChangedListener(textwatcher);
+                System.out.println(latitude + " " + longitude);
+
+                //Toast.makeText(AddressFromActivity.this, latitude+" "+longitude, Toast.LENGTH_LONG).show();
             }
         });
         /**
          * 当输入关键字变化时，动态更新建议列表
          */
-        keyWorldsView.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
 
 
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2,
-                                      int arg3) {
-                if (cs.length() <= 0) {
-                    return;
-                }
-                String city = ((TextView) findViewById(R.id.address_from_tv_city)).getText()
-                        .toString();
-                EditText editSearchKey = (EditText) findViewById(R.id.address_from_searchkey);
-                mPoiSearch.searchInCity((new PoiCitySearchOption()).city(city)
-                        .keyword(editSearchKey.getText().toString())
-                        .pageNum(loadIndex));
-
-            }
-        });
+        textwatcher=new CompleteTextWatcher();
+        keyWorldsView.addTextChangedListener(textwatcher);
 
     }
 

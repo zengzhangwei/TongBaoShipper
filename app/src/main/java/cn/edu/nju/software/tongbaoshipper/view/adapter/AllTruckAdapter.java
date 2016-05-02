@@ -56,8 +56,8 @@ public class AllTruckAdapter extends BaseAdapter {
         TextView tv_truckWeight = (TextView) convertView.findViewById(R.id.tv_truck_weight);
 
         tv_truckType.setText(truck.getTruckType());
-        tv_truckStartingprice.setText(truck.getStartingprice());
-        tv_truckPrice.setText(truck.getPrice());
+        tv_truckStartingprice.setText(truck.getStartingpriceString());
+        tv_truckPrice.setText(truck.getPriceString());
         tv_truckLwh.setText(truck.getLwh());
         tv_truckWeight.setText(truck.getWeight());
 

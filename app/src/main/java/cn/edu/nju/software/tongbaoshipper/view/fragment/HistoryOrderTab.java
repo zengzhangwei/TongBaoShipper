@@ -25,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +61,8 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
             protected Void doInBackground(Void... params) {
                 SystemClock.sleep(1000);
                 //添加数据
+                refreshOrderList();
+
                 return null;
             }
 
@@ -102,25 +106,31 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
         }
     }
 
-
-    private void refreshOrderList()
+    private void addcancelOrder()
     {
-        System.out.println("继续刷新订单");
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
+        params.put("type","3");
         Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_SHOW_MY_ORDER_LIST,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
-                        System.out.println("sdsdsd");
 
                         Log.d(getContext().getClass().getName(), jsonObject.toString());
                         try {
                             if (ShipperService.getResult(jsonObject)) {
 
                                 System.out.println(jsonObject);
-                                System.out.println("Refresh History");
-                                orderList=ShipperService.getOrderList(jsonObject);
+                                orderList.addAll(ShipperService.getOrderList(jsonObject));
+                                System.out.println("Refresh History:cancel");
+
+                                Collections.sort(orderList, new Comparator<Order>() {
+                                    @Override
+                                    public int compare(Order lhs, Order rhs) {
+                                        return lhs.getId()-lhs.getId();
+                                    }
+                                });
+
                                 if (orderList!=null)
                                 {
                                     if (orderList.size()<1) emptyView.setVisibility(View.VISIBLE);
@@ -130,6 +140,54 @@ public class HistoryOrderTab extends Fragment implements OnRefreshListener {
                                 }
                                 else  emptyView.setVisibility(View.INVISIBLE);
                                 System.out.println("一共" + orderList.size() + "条记录");
+                            } else {
+                                Toast.makeText(getContext(), ShipperService.getErrorMsg(jsonObject),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e(getContext().getClass().getName(), volleyError.getMessage(), volleyError);
+                        // http authentication 401
+//                        if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
+//                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                            return;
+//                        }
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.network_error),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }, params);
+        requestQueue.add(request);
+    }
+
+
+    private void refreshOrderList()
+    {
+        System.out.println("继续刷新订单");
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+        params.put("type","2");
+        Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_SHOW_MY_ORDER_LIST,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+
+                        Log.d(getContext().getClass().getName(), jsonObject.toString());
+                        try {
+                            if (ShipperService.getResult(jsonObject)) {
+
+                                System.out.println(jsonObject);
+                                orderList=ShipperService.getOrderList(jsonObject);
+                                System.out.println("Refresh History：complete");
+
+                                System.out.println("一共" + orderList.size() + "条记录");
+                                addcancelOrder();
                             } else {
                                 Toast.makeText(getContext(), ShipperService.getErrorMsg(jsonObject),
                                         Toast.LENGTH_SHORT).show();

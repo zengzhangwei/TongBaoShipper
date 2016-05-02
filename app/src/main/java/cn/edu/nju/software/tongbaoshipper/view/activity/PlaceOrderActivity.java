@@ -100,6 +100,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     {
         System.out.println("Place Order Get TruckType");
         allList=ShipperService.getAllTruckType(PlaceOrderActivity.this);
+        distance=price=0;
         startlng=startlat=arrivelng=arrivelat=-200;
         mDriveSearch = RoutePlanSearch.newInstance();
         OnGetRoutePlanResultListener listener =new OnGetRoutePlanResultListener() {
@@ -119,9 +120,16 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
                 System.out.println(drivingRouteResult.getRouteLines().get(0).getDistance()+"M");
                 distance=drivingRouteResult.getRouteLines().get(0).getDistance()/1000;
-                price=distance*8;
-                text_distance.setText("行车距离共 "+distance+"公里");
+                price=0;
+                for (Truck t:arrTruck)
+                {
+                    price+=t.getStartingprice();
+                    if (distance>t.getBaseDistance())
+                        price+=t.getPrice()*(distance-t.getBaseDistance());
+                }
                 text_money.setText("运输费用共 "+price+"元");
+
+                text_distance.setText("行车距离共 "+distance+"公里");
 
             }
 
@@ -382,6 +390,17 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             if(resultCode==RESULT_CODE_TRUCK) {
                 int result=data.getIntExtra("truck", 0);
                 arrTruck.add(allList.get(result));
+                if (distance>0){
+                    price=0;
+
+                    for (Truck t:arrTruck)
+                    {
+                        price+=t.getStartingprice();
+                        if (distance>t.getBaseDistance())
+                            price+=t.getPrice()*(distance-t.getBaseDistance());
+                    }
+                    text_money.setText("运输费用共 " + price + "元");
+                }
                 vehicleList.setAdapter(vehicleList.getAdapter());
             }
         }

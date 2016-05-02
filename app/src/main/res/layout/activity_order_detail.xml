@@ -84,8 +84,8 @@
                         android:layout_width="@dimen/login_iv_width"
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
-                        android:padding="@dimen/login_iv_padding"
-                        android:src="@drawable/login_password" />
+                        android:padding="8dp"
+                        android:src="@drawable/order_waiting" />
 
                     <TextView
                         android:id="@+id/order_state_tv"
@@ -478,15 +478,171 @@
                             android:textSize="@dimen/item_address_btn_tv_size" />
                     </LinearLayout>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_address_btn_margin"
+                            android:layout_marginStart="@dimen/item_address_btn_margin"
+                            android:text="司机信息 ："
+                            android:textColor="@color/font_somber"
+                            android:textSize="@dimen/item_address_btn_tv_size" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/detail_order_driver_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_address_btn_margin"
+                            android:layout_marginStart="@dimen/item_address_btn_margin"
+                            android:text="暂无司机信息"
+                            android:textColor="@color/font_somber"
+                            android:textSize="@dimen/item_address_btn_tv_size" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/order_evaluation_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/order_detail_info"
+                android:visibility="gone"
+                android:background="@drawable/rect_border"
+                android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="订单评价"
+                        android:textColor="@color/font_black"
+                        />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_line"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/common" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="司机评分"
+                            android:textColor="@color/font_somber"
+                            android:textSize="@dimen/item_address_btn_tv_size" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <RatingBar
+                            android:id="@+id/order_detail_remarkPoint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:rating="5"
+                            android:stepSize="1"
+                            android:numStars="5"
+                            android:isIndicator="true"
+                            android:progressBackgroundTint="@color/background_blue"
+                            android:progressTint="@color/green"
+                            android:progressBackgroundTintMode="src_atop"
+
+                            android:background="@null" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_line"
+                    android:layout_marginLeft="70dp"
+                    android:background="@color/background_gray" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="订单评语"
+                            android:textColor="@color/font_somber"
+                            android:textSize="@dimen/item_address_btn_tv_size" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/detail_order_remarkText"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            style="@style/common_font_hint"
+                            android:background="@null"
+                            android:gravity="center_vertical"
+                            android:text="司机服务态度很好，送货很及时，五星好评"
+                            android:textSize="@dimen/item_address_btn_tv_size" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/order_detail_button_area"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/order_detail_info"
+                android:layout_below="@+id/order_evaluation_info"
                 android:layout_marginTop="50dp"
                 android:orientation="horizontal">
 

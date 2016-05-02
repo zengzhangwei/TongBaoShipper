@@ -32,14 +32,13 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/address_start" />
+                    android:src="@drawable/truck_small" />
 
                 <TextView
                     android:id="@+id/tv_truck_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+                    android:layout_marginLeft="15dp"
                     android:text="大货车"
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -50,7 +49,7 @@
                 android:id="@+id/item_truck_price_value"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -95,13 +94,12 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/address_start" />
+                    android:src="@drawable/truck_lwh" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+                    android:layout_marginLeft="15dp"
                     android:text="长宽高"
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -112,7 +110,7 @@
                 android:id="@+id/item_truck_lwh_value"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -146,13 +144,12 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/address_start" />
+                    android:src="@drawable/truck_weight" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
+                    android:layout_marginLeft="15dp"
                     android:text="载重"
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
@@ -163,7 +160,7 @@
                 android:id="@+id/item_truck_weight_value"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 

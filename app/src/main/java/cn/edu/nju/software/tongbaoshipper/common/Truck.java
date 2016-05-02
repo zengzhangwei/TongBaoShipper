@@ -12,7 +12,17 @@ public class Truck {
     private double height;
     private double weight;
     private double price;
+
+    public double getStartingprice() {
+        return startingprice;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
     private double startingprice;
+    private int baseDistance;
 
     public Truck()
     {}
@@ -35,16 +45,18 @@ public class Truck {
     {
         return (String.format("%.1f", length)+"m*"+String.format("%.1f", width)+"m*"+String.format("%.1f", height)+"m");
     }
-    public String getPrice() {
+    public String getPriceString() {
         return (String.format("%.1f", price)+"元/公里");
     }
+
+
 
     public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getStartingprice() {
-        return (String.format("%.1f", startingprice)+"元起");
+    public String getStartingpriceString() {
+        return (String.format("%.1f", startingprice)+"元起/"+baseDistance+"公里");
     }
 
     public void setStartingprice(double startingprice) {
@@ -97,5 +109,13 @@ public class Truck {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getBaseDistance() {
+        return baseDistance;
+    }
+
+    public void setBaseDistance(int baseDistance) {
+        this.baseDistance = baseDistance;
     }
 }

@@ -85,7 +85,7 @@
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
                         android:padding="@dimen/login_iv_padding"
-                        android:src="@drawable/login_password" />
+                        android:src="@drawable/date_pick" />
 
                     <EditText
                         android:id="@+id/date_input"

@@ -64,6 +64,8 @@ public class RunningOrderTab extends Fragment implements OnRefreshListener {
             protected Void doInBackground(Void... params) {
                 SystemClock.sleep(1000);
                 //添加数据
+                refreshOrderList();
+
                 return null;
             }
 
@@ -102,11 +104,11 @@ public class RunningOrderTab extends Fragment implements OnRefreshListener {
         System.out.println("继续刷新订单");
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
+        params.put("type","1");
         Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_SHOW_MY_ORDER_LIST,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
-                        System.out.println("sdsdsd");
                         Log.d(getContext().getClass().getName(), jsonObject.toString());
                         try {
                             if (ShipperService.getResult(jsonObject)) {

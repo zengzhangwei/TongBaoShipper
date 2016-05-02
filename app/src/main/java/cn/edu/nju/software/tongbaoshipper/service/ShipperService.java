@@ -260,6 +260,8 @@ public class ShipperService {
                 truck.setLength(object.getDouble("length"));
                 truck.setWidth(object.getDouble("width"));
                 truck.setHeight(object.getDouble("height"));
+                truck.setBaseDistance(object.getInt("baseDistance"));
+
                 truckType.add(truck);
             }
 
@@ -297,14 +299,15 @@ public class ShipperService {
                 order.setPlaceTime(object.getString("time"));
                 order.setAddressFrom(object.getString("addressFrom"));
                 order.setAddressTo(object.getString("addressTo"));
-                int[] s = {1};
-                order.setTruckTypes(s);
+                order.setTruckTypes(object.getJSONArray("truckTypes"));
                 order.setPrice(object.getInt("money"));
                 order.setFromContactName(object.getString("fromContactName"));
                 order.setFromContactPhone(object.getString("fromContactPhone"));
                 order.setToContactName(object.getString("toContactName"));
                 order.setToContactPhone(object.getString("toContactPhone"));
                 order.setLoadTime(object.getString("loadTime"));
+                order.setState(object.getInt("state"));
+
                 orderArrayList.add(order);
             }
         }
@@ -323,8 +326,7 @@ public class ShipperService {
             order.setPlaceTime(object.getString("time"));
             order.setAddressFrom(object.getString("addressFrom"));
             order.setAddressTo(object.getString("addressTo"));
-            int[] s = {1};
-            order.setTruckTypes(s);
+            order.setTruckTypes((object.getJSONArray("truckTypes")));
             order.setPrice(object.getInt("money"));
             order.setFromContactName(object.getString("fromContactName"));
             order.setFromContactPhone(object.getString("fromContactPhone"));
@@ -367,8 +369,10 @@ public class ShipperService {
         Order order=new Order("2016年4月25日 00:10:57","2016年4月25日 00:11:00","南京大学鼓楼校区","张三","124-3434-3234","南京大学仙林校区","李四","123-3434-3434");
         order.setId(1261763711);
         order.setPrice(150);
-        int truck[]={1,2};
-        order.setTruckTypes(truck);
+        JSONArray truckArray=new JSONArray();
+        truckArray.put(1);
+        truckArray.put(2);
+        order.setTruckTypes(truckArray);
         order.setState(1);
         return order;
     }

@@ -31,7 +31,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/address_start" />
+                    android:src="@drawable/truck_small" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -45,34 +45,14 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/item_ordered_truck_weight"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/item_address_btn_height"
-                android:layout_weight="0.5"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
 
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_ordered_truck_weight"
-                    android:layout_marginLeft="@dimen/item_address_btn_margin"
-                    android:layout_marginStart="@dimen/item_address_btn_margin"
-                    android:text="5吨"
-                    android:textColor="@color/font_somber"
-                    android:textSize="@dimen/item_address_btn_tv_size" />
-
-            </LinearLayout>
             <LinearLayout
                 android:id="@+id/item_ordered_truck_lwh"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/item_address_btn_height"
                 android:layout_weight="1.5"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="vertical">
 
 
 
@@ -85,14 +65,23 @@
                     android:text="3.5m*2.5m*2.5m"
                     android:textColor="@color/font_somber"
                     android:textSize="@dimen/item_address_btn_tv_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_ordered_truck_weight"
+                    android:layout_marginLeft="@dimen/item_address_btn_margin"
+                    android:layout_marginStart="@dimen/item_address_btn_margin"
+                    android:text="5吨"
+                    android:textColor="@color/font_somber"
+                    android:textSize="@dimen/item_address_btn_tv_size" />
 
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/item_ordered_truck_price"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/item_address_btn_height"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:layout_weight="2"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView

@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,8 +50,13 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
     private TextView order_price;
     private TextView cancel_tv;
     private TextView ok_tv;
+    private ImageView state_iv;
     private RequestQueue requestQueue;
+    private LinearLayout evaluation_view;
 
+    private RatingBar evaluation_rating;
+    private TextView evaluation_text;
+    private TextView driver_tv;
     private Order order;
     private LinearLayout btn_back,btn_cancel,btn_ok;
     String orderid;
@@ -84,14 +91,11 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
                         try {
                             if (ShipperService.getResult(jsonObject)) {
                                 System.out.println("开始解析订单");
+                                System.out.println(jsonObject);
 
                                 order=ShipperService.getDetailOrder(jsonObject);
-
-                                if (order.getState()==4)
-                                    order_state.setText("订单已申请取消，等待司机确认");
-                                else
-                                    order_state.setText("订单尚未被抢，等待司机抢单");
-
+                                order_state.setText("订单尚未被抢，等待司机抢单");
+                                state_iv.setImageDrawable(getResources().getDrawable(R.drawable.order_waiting));
                                 order_id.setText(order.getId()+"");
                                 from_address.setText(order.getAddressFrom());
                                 to_address.setText(order.getAddressTo());
@@ -102,9 +106,8 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
                                 order_price.setText(order.getPrice()+"元");
 
                                 StringBuilder sb=new StringBuilder();
-                                for (int i:order.getTruckTypes())
-                                    sb.append(ShipperService.getAllTruckType(WaitingOrderActivity.this).get(i).getTruckType()+" ");
-                                sb.append(order.getPrice() + "元");
+                                for (int i=0;i<order.getTruckTypes().length();i++)
+                                    sb.append(order.getTruckTypes().getString(i)+" ");
                                 truck_type.setText(sb.toString());
 
 
@@ -140,6 +143,7 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
     private void initView()
     {
         order= ShipperService.getTestOrder();
+
         order_state=(TextView) findViewById(R.id.order_state_tv);
         order_id=(TextView) findViewById(R.id.detail_order_id_tv);
         from_address=(TextView) findViewById(R.id.detail_order_from_tv);
@@ -152,7 +156,11 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
         order_price=(TextView) findViewById(R.id.detail_order_price_tv);
         cancel_tv=(TextView) findViewById(R.id.order_detail_cancel_tv);
         ok_tv=(TextView) findViewById(R.id.order_detail_ok_tv);
-
+        state_iv=(ImageView) findViewById(R.id.order_iv_state);
+        evaluation_view=(LinearLayout) findViewById(R.id.order_evaluation_info);
+        driver_tv=(TextView) findViewById(R.id.detail_order_driver_tv);
+        evaluation_rating=(RatingBar) findViewById(R.id.order_detail_remarkPoint);
+        evaluation_text=(TextView) findViewById(R.id.detail_order_remarkText);
 
         btn_cancel=(LinearLayout) findViewById(R.id.order_detail_btn_cancel);
         btn_ok=(LinearLayout) findViewById(R.id.order_detail_btn_ok);
@@ -173,10 +181,6 @@ public class WaitingOrderActivity extends AppCompatActivity implements View.OnCl
         place_time.setText(order.getPlaceTime());
         order_price.setText(order.getPrice()+"元");
 
-        StringBuilder sb=new StringBuilder();
-        for (int i:order.getTruckTypes())
-            sb.append(ShipperService.getAllTruckType(WaitingOrderActivity.this).get(i).getTruckType()+" ");
-        truck_type.setText(sb.toString());
 
         cancel_tv.setText("取消订单");
         ok_tv.setText("再来一单");

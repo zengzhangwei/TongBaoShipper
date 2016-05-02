@@ -113,8 +113,7 @@ public class FragmentOrder extends Fragment {
                     mViewPager.setCurrentItem(index);
                 }
             });
-            selectbutton.setSelectedIndex(1);
-            mViewPager.setCurrentItem(1);
+            selectbutton.setSelectedIndex(mViewPager.getCurrentItem());
 
         } else {
             Intent intent = new Intent(getActivity(), LoginActivity.class);

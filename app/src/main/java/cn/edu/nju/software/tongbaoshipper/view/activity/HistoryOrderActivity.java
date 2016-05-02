@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -49,10 +50,16 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
     private TextView order_price;
     private TextView cancel_tv;
     private TextView ok_tv;
+    private ImageView state_iv;
     private RequestQueue requestQueue;
     private String orderid;
     private Order order;
     private LinearLayout btn_back,btn_cancel,btn_ok;
+    private LinearLayout evaluation_view;
+
+    private RatingBar evaluation_rating;
+    private TextView evaluation_text;
+    private TextView driver_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +87,21 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
                         Log.d(HistoryOrderActivity.class.getName(), jsonObject.toString());
                         try {
                             if (ShipperService.getResult(jsonObject)) {
+                                System.out.println(jsonObject);
                                 order=ShipperService.getDetailOrder(jsonObject);
 
-                                if (order.getState()==3)
+                                if (order.getState()==2) {
                                     order_state.setText("订单已完成，您可以评价订单或者删除记录");
-                                else
-                                    order_state.setText("订单已取消，您可以删除记录");
+                                    state_iv.setImageDrawable(getResources().getDrawable(R.drawable.order_complete));
 
+                                }
+                                else {
+                                    order_state.setText("订单已取消，您可以删除记录");
+                                    state_iv.setImageDrawable(getResources().getDrawable(R.drawable.order_cancel));
+                                    evaluation_view.setVisibility(View.VISIBLE);
+                                    evaluation_rating.setNumStars(3);
+
+                                }
                                 order_id.setText(order.getId()+"");
                                 from_address.setText(order.getAddressFrom());
                                 to_address.setText(order.getAddressTo());
@@ -97,9 +112,8 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
                                 order_price.setText(order.getPrice()+"元");
 
                                 StringBuilder sb=new StringBuilder();
-                                for (int i:order.getTruckTypes())
-                                    sb.append(ShipperService.getAllTruckType(HistoryOrderActivity.this).get(i).getTruckType()+" ");
-                                sb.append(order.getPrice() + "元");
+                                for (int i=0;i<order.getTruckTypes().length();i++)
+                                    sb.append(order.getTruckTypes().getString(i)+" ");
                                 truck_type.setText(sb.toString());
 
 
@@ -147,7 +161,12 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
         order_price=(TextView) findViewById(R.id.detail_order_price_tv);
         cancel_tv=(TextView) findViewById(R.id.order_detail_cancel_tv);
         ok_tv=(TextView) findViewById(R.id.order_detail_ok_tv);
+        state_iv=(ImageView) findViewById(R.id.order_iv_state);
 
+        evaluation_view=(LinearLayout) findViewById(R.id.order_evaluation_info);
+        driver_tv=(TextView) findViewById(R.id.detail_order_driver_tv);
+        evaluation_rating=(RatingBar) findViewById(R.id.order_detail_remarkPoint);
+        evaluation_text=(TextView) findViewById(R.id.detail_order_remarkText);
 
         btn_cancel=(LinearLayout) findViewById(R.id.order_detail_btn_cancel);
         btn_ok=(LinearLayout) findViewById(R.id.order_detail_btn_ok);
@@ -167,11 +186,6 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
         place_time.setText(order.getPlaceTime());
         order_price.setText(order.getPrice()+"元");
 
-        StringBuilder sb=new StringBuilder();
-        for (int i:order.getTruckTypes())
-            sb.append(ShipperService.getAllTruckType(HistoryOrderActivity.this).get(i).getTruckType()+" ");
-        sb.append(order.getPrice() + "元");
-        truck_type.setText(sb.toString());
 
         cancel_tv.setText("删除订单");
         ok_tv.setText("评价订单");

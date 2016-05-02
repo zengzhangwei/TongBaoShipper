@@ -210,7 +210,7 @@ public class UserService {
             //TODO complete
             driver.setId(object.getInt("id"));
             driver.setNickName(object.getString("nickName"));
-            driver.setNickName(object.getString("phoneNum"));
+            driver.setPhoneNum(object.getString("phoneNum"));
         }
         return driver;
     }

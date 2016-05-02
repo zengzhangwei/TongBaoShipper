@@ -37,7 +37,7 @@ public class AutoAddressAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public Object getItem(int position) {
-        return arraddress.get(position);
+        return "";
     }
 
     @Override
@@ -51,13 +51,9 @@ public class AutoAddressAdapter extends BaseAdapter implements Filterable {
 
         TextView addname=(TextView) convertView.findViewById(R.id.item_tv_address_name);
         TextView adddetail=(TextView) convertView.findViewById(R.id.item_tv_address_detail);
-        System.out.println(arraddress.size()+"sdsdsd");
-
         PoiInfo addinfo=arraddress.get(position);
         String name=addinfo.name;
         String detail=addinfo.address;
-        System.out.println(name+"name");
-        System.out.println(detail+"det");
         addname.setText(name);
         adddetail.setText(detail);
 

@@ -13,6 +13,7 @@
             android:id="@+id/iv_header_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
             android:layout_gravity="center"
             android:minWidth="30dip"
             android:src="@drawable/headview_arrow" />
@@ -46,8 +47,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
+
             android:text="最后刷新时间: 2014-10-10 12:56:12"
-            android:textColor="@android:color/white"
+            android:textColor="@color/font_blue"
             android:textSize="14sp" />
     </LinearLayout>
 

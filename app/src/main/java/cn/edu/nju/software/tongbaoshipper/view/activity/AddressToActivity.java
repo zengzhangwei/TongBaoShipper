@@ -48,6 +48,7 @@ public class AddressToActivity extends AppCompatActivity implements
     private AutoCompleteTextView keyWorldsView = null;
     private AutoAddressAdapter addressAdapter = null;
     private int loadIndex = 0;
+    private CompleteTextWatcher textwatcher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,34 @@ public class AddressToActivity extends AppCompatActivity implements
 
 
     }
+    private class CompleteTextWatcher implements TextWatcher{
+        @Override
+        public void afterTextChanged(Editable arg0) {
 
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence arg0, int arg1,
+                                      int arg2, int arg3) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence cs, int arg1, int arg2,
+                                  int arg3) {
+            if (cs.length() <= 0) {
+                return;
+            }
+            String city = ((TextView) findViewById(R.id.address_to_tv_city)).getText()
+                    .toString();
+            EditText editSearchKey = (EditText) findViewById(R.id.address_to_searchkey);
+            mPoiSearch.searchInCity((new PoiCitySearchOption()).city(city)
+                    .keyword(editSearchKey.getText().toString())
+                    .pageNum(loadIndex));
+
+        }
+    }
     private void initView()
     {
         keyWorldsView = (AutoCompleteTextView) findViewById(R.id.address_to_searchkey);
@@ -85,44 +113,27 @@ public class AddressToActivity extends AppCompatActivity implements
         keyWorldsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("hello");
+                System.out.println("选中地址");
+                keyWorldsView.removeTextChangedListener(textwatcher);
                 keyWorldsView.setText(addressList.get(position).name + " " + addressList.get(position).address);
+                System.out.println(addressList.get(position).name + " " + addressList.get(position).address);
+
                 longitude=addressList.get(position).location.longitude;
                 latitude=addressList.get(position).location.latitude;
+
+                keyWorldsView.addTextChangedListener(textwatcher);
+                //Toast.makeText(AddressFromActivity.this, latitude+" "+longitude, Toast.LENGTH_LONG).show();
+                System.out.println(latitude+" "+longitude);
+
             }
         });
         /**
          * 当输入关键字变化时，动态更新建议列表
          */
-        keyWorldsView.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void afterTextChanged(Editable arg0) {
+        textwatcher=new CompleteTextWatcher();
+        keyWorldsView.addTextChangedListener(textwatcher);
 
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2,
-                                      int arg3) {
-                if (cs.length() <= 0) {
-                    return;
-                }
-                String city = ((TextView) findViewById(R.id.address_to_tv_city)).getText()
-                        .toString();
-                EditText editSearchKey = (EditText) findViewById(R.id.address_to_searchkey);
-                mPoiSearch.searchInCity((new PoiCitySearchOption()).city(city)
-                        .keyword(editSearchKey.getText().toString())
-                        .pageNum(loadIndex));
-
-            }
-        });
 
     }
 
