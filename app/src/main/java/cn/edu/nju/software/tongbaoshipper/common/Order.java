@@ -20,6 +20,34 @@ public class Order {
     private int payType;
     private int price;
 
+    public String getDriverPhoneNum() {
+        return driverPhoneNum;
+    }
+
+    public void setDriverPhoneNum(String driverPhoneNum) {
+        this.driverPhoneNum = driverPhoneNum;
+    }
+
+    public int getEvaluatePoint() {
+        return evaluatePoint;
+    }
+
+    public void setEvaluatePoint(int evaluatePoint) {
+        this.evaluatePoint = evaluatePoint;
+    }
+
+    public String getEvaluateContent() {
+        return evaluateContent;
+    }
+
+    public void setEvaluateContent(String evaluateContent) {
+        this.evaluateContent = evaluateContent;
+    }
+
+    private String driverPhoneNum;
+    private int evaluatePoint;
+    private String evaluateContent;
+
 
 
     public Order()

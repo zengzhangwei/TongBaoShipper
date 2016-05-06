@@ -281,6 +281,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             case R.id.home_btn_order_truck:
                 Log.d(this.getClass().getName(), "order truck");
                 Intent intentPlaceOrder = new Intent(context, PlaceOrderActivity.class);
+                intentPlaceOrder.putExtra("source",0);
                 startActivity(intentPlaceOrder);
                 break;
             default

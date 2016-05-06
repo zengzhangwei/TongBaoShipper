@@ -37,6 +37,7 @@ import cn.edu.nju.software.tongbaoshipper.common.User;
 import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
+import cn.edu.nju.software.tongbaoshipper.view.activity.PlaceOrderActivity;
 
 public class AddressAdapter extends BaseAdapter implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
 
@@ -76,7 +77,7 @@ public class AddressAdapter extends BaseAdapter implements AdapterView.OnItemLon
         TextView tvMessage = (TextView) convertView.findViewById(R.id.item_address_tv_message);
         LinearLayout btnStart = (LinearLayout) convertView.findViewById(R.id.item_address_btn_start);
         LinearLayout btnFinal = (LinearLayout) convertView.findViewById(R.id.item_address_btn_final);
-        Address address = arrAddress.get(position);
+        final Address address = arrAddress.get(position);
 
         // TODO add message
         tvLocation.setText(address.getAddressName());
@@ -84,13 +85,35 @@ public class AddressAdapter extends BaseAdapter implements AdapterView.OnItemLon
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "start", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "start", Toast.LENGTH_SHORT).show();
+                Intent startIntent= new Intent(context, PlaceOrderActivity.class);
+                startIntent.putExtra("source",1);
+                startIntent.putExtra("address",address.getAddressName());
+                startIntent.putExtra("contact",address.getContactName());
+                startIntent.putExtra("phone",address.getPhoneNum());
+                startIntent.putExtra("lat",address.getLat());
+                startIntent.putExtra("lng",address.getLng());
+                context.startActivity(startIntent);
+
+
+
+
             }
         });
         btnFinal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "final", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "final", Toast.LENGTH_SHORT).show();
+                Intent finalIntent= new Intent(context, PlaceOrderActivity.class);
+                finalIntent.putExtra("source",2);
+                finalIntent.putExtra("address",address.getAddressName());
+                finalIntent.putExtra("contact",address.getContactName());
+                finalIntent.putExtra("phone",address.getPhoneNum());
+                finalIntent.putExtra("lat",address.getLat());
+                finalIntent.putExtra("lng",address.getLng());
+                context.startActivity(finalIntent);
+
+
             }
         });
         return convertView;

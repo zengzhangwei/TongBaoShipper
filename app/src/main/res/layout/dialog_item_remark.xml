@@ -53,6 +53,7 @@
                     android:rating="5"
                     android:stepSize="1"
                     android:numStars="5"
+                    android:max="5"
                     android:progressBackgroundTint="@color/background_blue"
                     android:progressTint="@color/green"
                     android:progressBackgroundTintMode="src_atop"

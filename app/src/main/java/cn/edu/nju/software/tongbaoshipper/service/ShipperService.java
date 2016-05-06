@@ -193,9 +193,13 @@ public class ShipperService {
         return getResult(jsonObject);
     }
 
-    public static boolean placeOrder(JSONObject jsonObject) throws JSONException {
+    public static int placeOrder(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getInt("result");
+    }
+    public static boolean splitOrder(JSONObject jsonObject) throws JSONException {
         return getResult(jsonObject);
     }
+
 
     public static ArrayList<Truck> getAllTruckType(final Context context)
     {
@@ -334,6 +338,12 @@ public class ShipperService {
             order.setToContactPhone(object.getString("toContactPhone"));
             order.setLoadTime(object.getString("loadTime"));
             order.setState(object.getInt("state"));
+            order.setDriverPhoneNum(object.getString("driverPhoneNum"));
+
+            if (object.getString("evaluatePoint").equals("null"))
+            order.setEvaluatePoint(-1);
+            System.out.println(order.getEvaluatePoint()+"分");
+            order.setEvaluateContent(object.getString("evaluateContent"));
 
         }
         return order;
