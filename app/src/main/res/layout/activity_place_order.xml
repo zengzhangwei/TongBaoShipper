@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
-    tools:context=".view.activity.PlaceOrderActivity">
+    tools:context=".View.Activity.PlaceOrderActivity">
 
     <RelativeLayout
         android:id="@+id/place_order_title"
@@ -85,7 +85,7 @@
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
                         android:padding="@dimen/login_iv_padding"
-                        android:src="@drawable/login_password" />
+                        android:src="@drawable/date_pick" />
 
                     <EditText
                         android:id="@+id/date_input"
@@ -141,7 +141,7 @@
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
                         android:padding="@dimen/login_iv_padding"
-                        android:src="@drawable/login_password" />
+                        android:src="@drawable/address_start" />
 
                     <EditText
                         android:id="@+id/start_address_input"
@@ -172,7 +172,7 @@
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
                         android:padding="@dimen/login_iv_padding"
-                        android:src="@drawable/login_password" />
+                        android:src="@drawable/address_final" />
 
                     <EditText
                         android:id="@+id/arrive_address_input"
@@ -227,10 +227,10 @@
                 </com.sevenheaven.segmentcontrol.CompleteListView>
 
                 <LinearLayout
-                    android:id="@+id/add_trunk_btn"
+                    android:id="@+id/add_truck_btn"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/btn_height"
-                    android:background="@drawable/rect_border"
+                    android:background="@drawable/item_button_background"
                     android:gravity="center">
 
                     <TextView
@@ -261,7 +261,7 @@
                     <TextView
                         android:layout_width="200dp"
                         android:layout_height="20dp"
-                        android:layout_marginLeft="25dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:text="优先发送给常用司机"
                         android:textColor="@color/font_black" />
@@ -287,21 +287,35 @@
                     android:id="@+id/transport_money"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="3">
+                    android:layout_weight="3"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
 
+                    <TextView
+                        android:id="@+id/transport_distance_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:text="行车路程共 0 公里"
+                        android:textColor="@color/font_black"
+                        />
                     <TextView
                         android:id="@+id/transport_money_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="运费共   250   元"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="5dp"
+                        android:text="运费共 0 元"
                         android:textColor="@color/font_black"
                         />
+
                 </RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/place_order_trunk_btn"
+                android:id="@+id/place_order_truck_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/old_driver_and_money"
@@ -314,6 +328,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:background="@drawable/item_button_background"
                     android:gravity="center"
                     android:padding="@dimen/common_small"
                     android:drawableLeft="@drawable/home_order_truck"
@@ -322,8 +337,8 @@
                     android:textSize="@dimen/fragment_home_order_truck_text_size"/>
 
             </RelativeLayout>
+
         </RelativeLayout>
     </ScrollView>
-
 
 </RelativeLayout>

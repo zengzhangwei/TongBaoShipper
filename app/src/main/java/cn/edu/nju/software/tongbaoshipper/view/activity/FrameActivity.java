@@ -28,6 +28,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.baidu.mapapi.SDKInitializer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +42,9 @@ import cn.edu.nju.software.tongbaoshipper.constant.Common;
 import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.constant.Prefs;
 import cn.edu.nju.software.tongbaoshipper.R;
+import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
 import cn.edu.nju.software.tongbaoshipper.service.UserService;
+import cn.edu.nju.software.tongbaoshipper.view.adapter.AllTruckAdapter;
 import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentHome;
 import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentMy;
 import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentNearBy;
@@ -68,7 +71,8 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
         // init jpush
         JPushInterface.init(this);
         JPushInterface.setDebugMode(true);
-
+        SDKInitializer.initialize(this.getApplicationContext());
+        ShipperService.getAllTruckType(FrameActivity.this);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_frame);
         initView();
@@ -77,6 +81,8 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
         requestQueue = Volley.newRequestQueue(FrameActivity.this);
         tokenValid();
     }
+
+
 
     @Override
     protected void onResume() {
