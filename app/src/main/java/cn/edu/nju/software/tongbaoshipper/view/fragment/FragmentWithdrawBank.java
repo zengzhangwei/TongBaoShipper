@@ -3,6 +3,7 @@ package cn.edu.nju.software.tongbaoshipper.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,11 +76,11 @@ public class FragmentWithdrawBank extends Fragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.withdraw_bank_btn_confirm:
                 Log.d(FragmentWithdrawBank.class.getName(), "withdraw bank");
-                if (etBankCard.getText().toString().equals("")) {
+                if (TextUtils.isEmpty(etBankCard.getText().toString())) {
                     Toast.makeText(context, context.getResources().getString(R.string.input_bank_card),
                             Toast.LENGTH_SHORT).show();
                     return;
-                } else if(etAmount.getText().toString().equals("")) {
+                } else if(TextUtils.isEmpty(etAmount.getText().toString())) {
                     Toast.makeText(context, context.getResources().getString(R.string.input_amount),
                             Toast.LENGTH_SHORT).show();
                     return;

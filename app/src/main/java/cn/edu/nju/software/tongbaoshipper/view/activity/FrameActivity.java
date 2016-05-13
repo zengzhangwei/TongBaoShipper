@@ -34,22 +34,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.common.PostRequest;
 import cn.edu.nju.software.tongbaoshipper.common.User;
 import cn.edu.nju.software.tongbaoshipper.constant.Common;
 import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.constant.Prefs;
-import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.service.ShipperService;
 import cn.edu.nju.software.tongbaoshipper.service.UserService;
-import cn.edu.nju.software.tongbaoshipper.view.adapter.AllTruckAdapter;
 import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentHome;
 import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentMy;
 import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentNearBy;
 import cn.edu.nju.software.tongbaoshipper.view.fragment.FragmentOrder;
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class FrameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -71,6 +73,17 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
         // init jpush
         JPushInterface.init(this);
         JPushInterface.setDebugMode(true);
+        Set<String> tags = new HashSet<>();
+        tags.add(Common.JPUSH_TAGS);
+        JPushInterface.setTags(FrameActivity.this, tags, new TagAliasCallback() {
+            @Override
+            public void gotResult(int i, String s, Set<String> set) {
+                if (i == 0) {
+                    Log.d(FrameActivity.class.getName(), String.format("init tags: %s", set.toString()));
+                }
+            }
+        });
+
         SDKInitializer.initialize(this.getApplicationContext());
         ShipperService.getAllTruckType(FrameActivity.this);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -81,7 +94,6 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
         requestQueue = Volley.newRequestQueue(FrameActivity.this);
         tokenValid();
     }
-
 
 
     @Override
@@ -296,7 +308,7 @@ public class FrameActivity extends AppCompatActivity implements View.OnClickList
                                                         Log.d(FrameActivity.class.getName(), "auto login");
                                                         Log.d(FrameActivity.class.getName(), jsonObject.toString());
                                                         try {
-                                                            if (UserService.login(jsonObject, user.getPhoneNum(),
+                                                            if (UserService.login(FrameActivity.this, jsonObject, user.getPhoneNum(),
                                                                     user.getPassword(), Common.USER_TYPE_SHIPPER)) {
                                                                 // local record user message
                                                                 UserService.saveObject(FrameActivity.this, Prefs.PREF_KEY_USER, User.getInstance());

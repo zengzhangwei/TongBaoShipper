@@ -1,9 +1,15 @@
 package cn.edu.nju.software.tongbaoshipper.common;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class User implements Serializable {
 
@@ -85,9 +91,20 @@ public class User implements Serializable {
 
     /**
      * 用户注销
+     *
+     * @param context Context
      */
-    public static void logout() {
+    public static void logout(final Context context) {
         user = new User();
+        // reset alias
+        JPushInterface.setAlias(context, "", new TagAliasCallback() {
+            @Override
+            public void gotResult(int i, String s, Set<String> set) {
+                if (i == 0) {
+                    Log.d(context.getClass().getName(), String.format("logout alias: %s", s));
+                }
+            }
+        });
     }
 
     public int getId() {

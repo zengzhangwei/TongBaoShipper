@@ -3,6 +3,7 @@ package cn.edu.nju.software.tongbaoshipper.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,17 +79,18 @@ public class FragmentWithdrawAlipay extends Fragment implements View.OnClickList
         switch (v.getId()) {
             case R.id.withdraw_alipay_btn_confirm:
                 Log.d(FragmentWithdrawAlipay.class.getName(), "withdraw bank");
-                if (etAccount.getText().toString().equals("")) {
+                if (TextUtils.isEmpty(etAccount.getText().toString())) {
                     Toast.makeText(context, context.getResources().getString(R.string.input_alipay_account),
                             Toast.LENGTH_SHORT).show();
                     return;
-                } else if (etAmount.getText().toString().equals("")) {
+                } else if (TextUtils.isEmpty(etAmount.getText().toString())) {
                     Toast.makeText(context, context.getResources().getString(R.string.input_amount),
                             Toast.LENGTH_SHORT).show();
                     return;
                 } else if (Double.valueOf(etAmount.getText().toString()) > User.getInstance().getMoney()) {
                     Toast.makeText(context, context.getResources().getString(R.string.input_amount_error),
                             Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 // TODO withdraw account useless
                 Map<String, String> params = new HashMap<>();

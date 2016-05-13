@@ -9,9 +9,11 @@
     <color name="background_white">#ffffff</color>
     <color name="background_blue">#1f6ef2</color>
     <color name="background_gray">#cccccc</color>
+    <color name="background_gray_pressed">#efefef</color>
     <color name="background_black">#211d1d</color>
     <color name="lines_gray">#c4c4c4</color>
     <color name="common">#1f6ef2</color>
+    <color name="common_pressed">#84aced</color>
 
     <!--font color-->
     <color name="font_blue">#1f6ef2</color>

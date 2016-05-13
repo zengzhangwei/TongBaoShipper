@@ -40,8 +40,7 @@
         android:layout_toRightOf="@id/item_message_iv"
         android:layout_toStartOf="@+id/item_message_tv_time"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:text="正在进行的订单被取消121232131231231231231231231231231231" />
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/item_message_tv_time"
@@ -50,8 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="12-28 14:00" />
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/item_message_tv_content"
@@ -64,8 +62,6 @@
         android:layout_marginTop="@dimen/common_tiny"
         android:layout_toEndOf="@+id/item_message_iv"
         android:layout_toRightOf="@+id/item_message_iv"
-        android:maxLines="2"
-        android:text="正在进行的订单被取消12123213正在进行的订单被取消12123213正在进行的订单被取消12123213正在进行的订单被取消12123213正在进行的订单被取消12123213正在进行的订单被取消12123213正在进行的订单被取消12123213正在进行的订单被取消12123213" />
-
+        android:maxLines="2" />
 
 </RelativeLayout>

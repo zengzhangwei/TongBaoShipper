@@ -3,6 +3,7 @@ package cn.edu.nju.software.tongbaoshipper.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -64,6 +65,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.register_btn:
                 Log.d(RegisterActivity.class.getName(), "register");
+                if (TextUtils.isEmpty(etPhone.getText().toString()) || TextUtils.isEmpty(etPassword.getText().toString())) {
+                    Toast.makeText(RegisterActivity.this, RegisterActivity.this.getResources().getString(R.string.register_message_not_completed),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 // 密码长度大于等于8
                 if (etPassword.getText().toString().length() >= Common.PASSWORD_MIN_LENGTH) {
                     // 判断手机号是否已注册

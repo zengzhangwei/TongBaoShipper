@@ -19,7 +19,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
+import cn.edu.nju.software.tongbaoshipper.R;
 import cn.edu.nju.software.tongbaoshipper.common.Account;
 import cn.edu.nju.software.tongbaoshipper.common.Banner;
 import cn.edu.nju.software.tongbaoshipper.common.Driver;
@@ -29,7 +31,8 @@ import cn.edu.nju.software.tongbaoshipper.common.Order;
 import cn.edu.nju.software.tongbaoshipper.common.User;
 import cn.edu.nju.software.tongbaoshipper.constant.Net;
 import cn.edu.nju.software.tongbaoshipper.constant.Prefs;
-import cn.edu.nju.software.tongbaoshipper.R;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class UserService {
 
@@ -84,7 +87,7 @@ public class UserService {
      * @return boolean
      * @throws JSONException
      */
-    public static boolean login(JSONObject jsonObject, String phoneNum, String password, int type) throws JSONException {
+    public static boolean login(final Context context, JSONObject jsonObject, String phoneNum, String password, int type) throws JSONException {
         if (getResult(jsonObject)) {
             JSONObject data = jsonObject.getJSONObject("data");
             User user = new User();
@@ -103,6 +106,16 @@ public class UserService {
                 e.printStackTrace();
             }
             User.login(user);
+
+            // set jpush alias
+            JPushInterface.setAlias(context, String.valueOf(User.getInstance().getId()), new TagAliasCallback() {
+                @Override
+                public void gotResult(int i, String s, Set<String> set) {
+                    if (i == 0) {
+                        Log.d(context.getClass().getName(), String.format("login alias: %s", s));
+                    }
+                }
+            });
             return true;
         }
         return false;
@@ -515,7 +528,7 @@ public class UserService {
      */
     public static void tokenInvalid(Context context, boolean isShow) {
         Log.d(context.getClass().getName(), "token invalid");
-        User.logout();
+        User.logout(context);
         // init shared preferences user date
         SharedPreferences.Editor editor = context.getSharedPreferences(Prefs.PREF_NAME, Context.MODE_PRIVATE).edit();
         editor.putString(Prefs.PREF_KEY_USER, "");

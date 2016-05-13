@@ -82,7 +82,7 @@
             android:layout_marginBottom="@dimen/common_margin_top"
             android:layout_gravity="bottom"
             android:gravity="center"
-            android:background="@drawable/rect_fill_gray">
+            android:background="@drawable/rect_fill_gray_btn">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

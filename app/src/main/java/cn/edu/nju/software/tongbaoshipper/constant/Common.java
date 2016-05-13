@@ -10,6 +10,10 @@ public class Common {
      */
     public static final int POI_SEARCH_PAGE_CAPACITY = 15;
     /**
+     * jpush tags
+     */
+    public static final String JPUSH_TAGS = "shipper";
+    /**
      * 用户类型 货主
      */
     public static final int USER_TYPE_SHIPPER = 0;
@@ -21,4 +25,5 @@ public class Common {
      * 密码最小长度
      */
     public static final int PASSWORD_MIN_LENGTH = 8;
+
 }

@@ -109,6 +109,7 @@
     <dimen name="dialog_item_title_height">42dp</dimen>
 
     <!--item account-->
+    <dimen name="item_account_time_text_size">10sp</dimen>
     <dimen name="item_account_money_text_size">16sp</dimen>
 
     <!--item message-->

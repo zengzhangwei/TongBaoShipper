@@ -152,7 +152,7 @@
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
         android:layout_marginTop="@dimen/login_margin"
-        android:background="@drawable/rect_fill"
+        android:background="@drawable/rect_fill_btn"
         android:gravity="center">
 
         <TextView

@@ -76,6 +76,7 @@
     <string name="login_btn">登陆</string>
     <string name="login_error">登陆碰到问题？</string>
     <string name="login_user_register">新用户注册</string>
+    <string name="login_message_not_completed">请输入登陆信息！</string>
 
     <!--activity register-->
     <string name="title_register">注册</string>
@@ -85,6 +86,7 @@
     <string name="register_login">已注册？立即登录</string>
     <string name="register_has">该手机号已注册！</string>
     <string name="register_success">手机号注册成功！</string>
+    <string name="register_message_not_completed">请输入注册信息！</string>
 
     <!--activity change password-->
     <string name="title_cp">修改密码</string>

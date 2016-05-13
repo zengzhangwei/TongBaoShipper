@@ -230,6 +230,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 layoutDot.getChildAt(index).setEnabled(false);
                 layoutDot.getChildAt(position).setEnabled(true);
                 index = position;
+                currentItem = position;
             }
 
             @Override

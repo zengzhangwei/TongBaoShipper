@@ -48,7 +48,7 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="d1fdc4f771287b68a274e169" />
+            android:value="ca9fe909612197690db46060" />
 
         <!-- Required SDK核心功能-->
         <activity

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import cn.edu.nju.software.tongbaoshipper.view.activity.FrameActivity;
 import cn.jpush.android.api.JPushInterface;
 
 public class ReceiverService extends BroadcastReceiver {
@@ -34,7 +35,7 @@ public class ReceiverService extends BroadcastReceiver {
             receiveNotification(bundle);
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(this.getClass().getName(), "notification opened");
-            openNotification(bundle);
+            openNotification(context, bundle);
         } else {
             Log.d(this.getClass().getName(), "Unhandled intent - " + intent.getAction());
         }
@@ -45,6 +46,11 @@ public class ReceiverService extends BroadcastReceiver {
      * @param bundle    Bundle
      */
     private void receiveMessage(Context context, Bundle bundle) {
+        Log.d(this.getClass().getName(), String.format("title: %s, message: %s",
+                bundle.getString(JPushInterface.EXTRA_TITLE),
+                bundle.getString(JPushInterface.EXTRA_MESSAGE)));
+        Log.d(this.getClass().getName(), String.format("content: %s",
+                bundle.getString(JPushInterface.EXTRA_EXTRA)));
         Toast.makeText(context, String.format("message: %s", bundle.getString(JPushInterface.EXTRA_MESSAGE)),
                 Toast.LENGTH_SHORT).show();
     }
@@ -55,27 +61,29 @@ public class ReceiverService extends BroadcastReceiver {
      */
     private void receiveNotification(Bundle bundle) {
         String title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
-        Log.d(this.getClass().getName(), " title : " + title);
-        String message = bundle.getString(JPushInterface.EXTRA_ALERT);
-        Log.d(this.getClass().getName(), "message : " + message);
+        String alert = bundle.getString(JPushInterface.EXTRA_ALERT);
         String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-        Log.d(this.getClass().getName(), "extras : " + extras);
+        String message = bundle.getString("message");
+        Log.d(this.getClass().getName(), String.format("title: %s, alert: %s, extras: %s, message: %s",
+                title, alert, extras, message));
     }
 
     /**
      * open notification
      * @param bundle    Bundle
      */
-    private void openNotification(Bundle bundle) {
-        String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-        String myValue = "";
-        try {
-            JSONObject extrasJson = new JSONObject(extras);
-            myValue = extrasJson.optString("myKey");
-        } catch (Exception e) {
-            Log.w(this.getClass().getName(), "Unexpected: extras is not a valid json", e);
-            return;
-        }
+    private void openNotification(Context context, Bundle bundle) {
+        Intent intent = new Intent(context, FrameActivity.class);
+        context.startActivity(intent);
+//        String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+//        String myValue = "";
+//        try {
+//            JSONObject extrasJson = new JSONObject(extras);
+//            myValue = extrasJson.optString("myKey");
+//        } catch (Exception e) {
+//            Log.w(this.getClass().getName(), "Unexpected: extras is not a valid json", e);
+//            return;
+//        }
 //        if (TYPE_THIS.equals(myValue)) {
 //            Intent mIntent = new Intent(context, ThisActivity.class);
 //            mIntent.putExtras(bundle);

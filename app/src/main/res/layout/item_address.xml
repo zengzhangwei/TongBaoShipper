@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/item_address_background"
+        android:background="@drawable/rect_border_btn"
         android:orientation="vertical"
         android:paddingLeft="@dimen/common_small"
         android:paddingRight="@dimen/common_small">
@@ -22,16 +22,14 @@
             android:layout_height="@dimen/item_address_tv_height"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="南京大学（江苏省南京市鼓楼区汉口路22号）" />
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/item_address_tv_message"
             style="@style/common_font_gray"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_address_tv_height"
-            android:gravity="center_vertical"
-            android:text="通宝 15850775808" />
+            android:gravity="center_vertical" />
 
         <View
             android:layout_width="match_parent"
