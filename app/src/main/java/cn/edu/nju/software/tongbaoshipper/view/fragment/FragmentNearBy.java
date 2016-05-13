@@ -26,15 +26,29 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolygonOptions;
+import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.district.DistrictResult;
+import com.baidu.mapapi.search.district.DistrictSearch;
+import com.baidu.mapapi.search.district.DistrictSearchOption;
+import com.baidu.mapapi.search.district.OnGetDistricSearchResultListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.edu.nju.software.tongbaoshipper.BaiduOverlay.MarkerListOverlay;
 import cn.edu.nju.software.tongbaoshipper.common.Driver;
@@ -51,7 +65,7 @@ import cn.edu.nju.software.tongbaoshipper.view.activity.UserActivity;
 /**
  * Created by MoranHe on 2016/1/13.
  */
-public class FragmentNearBy extends Fragment {
+public class FragmentNearBy extends Fragment implements OnGetDistricSearchResultListener {
 
     private Context context;
     private MapView mvMap;
@@ -65,20 +79,20 @@ public class FragmentNearBy extends Fragment {
     private RequestQueue requestQueue;
     private DriverOverlay overlay;
     private String phoneNum;
+    private DistrictSearch mDistrictSearch;
+    private LatLngBounds.Builder builder;
+    private LatLngBounds CityBounds;
+    private Timer timer;
 
     public FragmentNearBy() {
         super();
     }
 
-    @SuppressLint("ValidFragment")
-    public FragmentNearBy(Context context) {
-        super();
-        this.context = context;
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        // 初始化用户常用地址信息
+
+
+    private void freshDiverList()
+    {
+
         if (User.isLogin()) {
             Map<String, String> params = new HashMap<>();
             params.put("token", User.getInstance().getToken());
@@ -92,8 +106,12 @@ public class FragmentNearBy extends Fragment {
                                     System.out.println("司机列表");
                                     System.out.println(jsonObject);
                                     allList  = ShipperService.getDriverPositionList(jsonObject);
+                                    /*DriverPosition test=new DriverPosition();
+                                    test.setDriver(new Driver());
+                                    test.setPosition(new LatLng(39,116));
+                                    allList.add(test);*/
+                                    selectDriverPosition();
                                     splitDriverPosition();
-                                    baiduMap=mvMap.getMap();
                                     mvMap.showZoomControls(false);
                                     mvMap.showScaleControl(false);
                                     overlay=new DriverOverlay(baiduMap);
@@ -101,6 +119,17 @@ public class FragmentNearBy extends Fragment {
                                     overlay.addToMap();
                                     overlay.zoomToSpan();
                                     baiduMap.setOnMarkerClickListener(overlay);
+
+                                    baiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+                                        @Override
+                                        public void onMapLoaded() {
+                                            overlay.addToMap();
+
+                                            overlay.zoomToSpan();
+                                        }
+                                    });
+
+
 
                                     System.out.println("一共"+allList.size()+"条记录");
 
@@ -134,6 +163,57 @@ public class FragmentNearBy extends Fragment {
         }
     }
 
+    @Override
+    public void onGetDistrictResult(DistrictResult districtResult) {
+        if (districtResult == null) {
+            return;
+        }
+        if (districtResult.error == SearchResult.ERRORNO.NO_ERROR) {
+            List<List<LatLng>> polyLines = districtResult.getPolylines();
+            if (polyLines == null) {
+                return;
+            }
+            builder = new LatLngBounds.Builder();
+            for (List<LatLng> polyline : polyLines) {
+
+                for (LatLng latLng : polyline) {
+                    builder.include(latLng);
+                }
+            }
+            CityBounds= builder.build();
+        }
+        freshDiverList();
+        TimerTask task = new TimerTask(){
+            public void run() {
+               freshDiverList();
+                System.out.println("更新了一次司机列表");
+            }
+        };
+
+        timer = new Timer(true);
+        timer.schedule(task,10000, 10000); //延时1000ms后执行，1000ms执行一次
+        //timer.cancel();
+    }
+
+    @SuppressLint("ValidFragment")
+    public FragmentNearBy(Context context) {
+        super();
+        this.context = context;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 初始化用户常用地址信息
+        String city="南京";
+        mDistrictSearch.searchDistrict(new DistrictSearchOption().cityName(city));
+    }
+    @Override
+    public void onDestroy() {
+        mDistrictSearch.destroy();
+        timer.cancel();
+        super.onDestroy();
+    }
+
 
     private void splitDriverPosition()
     {
@@ -147,10 +227,22 @@ public class FragmentNearBy extends Fragment {
 
     }
 
+    private void selectDriverPosition()
+    {
+        for (DriverPosition dp:allList)
+        {
+            if(!CityBounds.contains(dp.getPosition()))
+                allList.remove(dp);
+        }
+
+    }
+
     protected void initView(View view)
     {
 
         mvMap = (MapView) view.findViewById(R.id.nearby_map);
+        baiduMap=mvMap.getMap();
+
 
     }
 
@@ -233,7 +325,7 @@ public class FragmentNearBy extends Fragment {
                                         Toast.makeText(context, context.getResources().getString(R.string.item_driver_add_success),
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(context, ShipperService.getErrorMsg(jsonObject),
+                                        Toast.makeText(context, ShipperService.getErrorMsg(jsonObject)+" 该司机已在您的收藏列表！",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
@@ -332,6 +424,8 @@ public class FragmentNearBy extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= View.inflate(context, R.layout.fragment_nearby, null);
         initView(view);
+        mDistrictSearch = DistrictSearch.newInstance();
+        mDistrictSearch.setOnDistrictSearchListener(this);
         requestQueue = Volley.newRequestQueue(this.getActivity());
 
         return view;

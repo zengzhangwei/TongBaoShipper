@@ -90,6 +90,35 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Intent intent=getIntent();
+        int request=intent.getIntExtra("source",0);
+        if (request==1){
+            startaddress=intent.getStringExtra("address");
+            startname=intent.getStringExtra("contact");
+            startphone=intent.getStringExtra("phone");
+            startlat =intent.getDoubleExtra("lat", -200);
+            startlng =intent.getDoubleExtra("lng",-200);
+            start_point_input.setText(startaddress+"\n"+startname+" "+startphone);
+        }
+        if (request==2){
+            arriveaddress=intent.getStringExtra("address");
+            arrivename=intent.getStringExtra("contact");
+            arrivephone =intent.getStringExtra("phone");
+            arrivelat=intent.getDoubleExtra("lat",-200);
+            arrivelng=intent.getDoubleExtra("lng",-200);
+            arrive_point_input.setText(arriveaddress+"\n"+arrivename+" "+arrivephone);
+        }
+
+
+
+
+    }
+
     @Override
     protected void onDestroy() {
         mDriveSearch.destroy();
@@ -100,7 +129,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
     {
         System.out.println("Place Order Get TruckType");
         allList=ShipperService.getAllTruckType(PlaceOrderActivity.this);
-        distance=price=0;
+        distance=price=-1;
         startlng=startlat=arrivelng=arrivelat=-200;
         mDriveSearch = RoutePlanSearch.newInstance();
         OnGetRoutePlanResultListener listener =new OnGetRoutePlanResultListener() {
@@ -119,7 +148,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
 
                 System.out.println(drivingRouteResult.getRouteLines().get(0).getDistance()+"M");
-                distance=drivingRouteResult.getRouteLines().get(0).getDistance()/1000;
+                distance=(drivingRouteResult.getRouteLines().get(0).getDistance()-1)/1000+1;
                 price=0;
                 for (Truck t:arrTruck)
                 {
@@ -252,6 +281,72 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             return true;
     }
 
+    private void splitOrder(final Map<String, String> params)
+    {
+        AlertDialog.Builder builder;
+        AlertDialog dialog;
+        View dialogView;
+        TextView dialogText;
+
+        builder = new AlertDialog.Builder(this);
+        dialogView=(getLayoutInflater().inflate(R.layout.dialog_item_confirm,null));
+        dialogText=(TextView)dialogView.findViewById(R.id.dialog_confirm_text);
+        dialogText.setText("下单失败，订单过大，是否需要拆单 ？");
+        builder.setView(dialogView);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 执行点击确定按钮的业务逻辑
+                Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_SPLIT_ORDER,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                Log.d(PlaceOrderActivity.class.getName(), jsonObject.toString());
+                                try {
+                                    if (ShipperService.splitOrder(jsonObject)) {
+                                        System.out.println("下单成功");
+                                        Toast.makeText(PlaceOrderActivity.this, "下单成功",
+                                                Toast.LENGTH_SHORT).show();
+                                        // 添加成功自动关闭
+                                        finish();
+                                    }  else {
+                                        Toast.makeText(PlaceOrderActivity.this, ShipperService.getErrorMsg(jsonObject),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.e(PlaceOrderActivity.class.getName(), volleyError.getMessage(), volleyError);
+                                //http authentication 401
+//                                if (volleyError.networkResponse.statusCode == Net.NET_ERROR_AUTHENTICATION) {
+//                                    Intent intent = new Intent(UserActivity.this, LoginActivity.class);
+//                                    startActivity(intent);
+//                                    return;
+//                                }
+                                Toast.makeText(PlaceOrderActivity.this, PlaceOrderActivity.this.getResources().getString(R.string.network_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }, params);
+                requestQueue.add(request);
+
+
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 执行点击取消按钮的业务逻辑
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
+    }
+
     @Override
     public void onClick(View v) {
         AlertDialog.Builder builder;
@@ -284,7 +379,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 执行点击确定按钮的业务逻辑
-                            Map<String, String> params = new HashMap<>();
+                            final Map<String, String> params = new HashMap<>();
                             params.put("token", User.getInstance().getToken());
                             params.put("addressFrom",startaddress);
                             params.put("addressFromLat", startlat+"");
@@ -315,12 +410,15 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                                         public void onResponse(JSONObject jsonObject) {
                                             Log.d(PlaceOrderActivity.class.getName(), jsonObject.toString());
                                             try {
-                                                if (ShipperService.placeOrder(jsonObject)) {
+                                                int flag=ShipperService.placeOrder(jsonObject);
+                                                if (flag==1) {
                                                     System.out.println("下单成功");
                                                     Toast.makeText(PlaceOrderActivity.this, "下单成功",
                                                             Toast.LENGTH_SHORT).show();
                                                     // 添加成功自动关闭
                                                     finish();
+                                                } else if (flag==2) {
+                                                    splitOrder(params);
                                                 } else {
                                                     Toast.makeText(PlaceOrderActivity.this, ShipperService.getErrorMsg(jsonObject),
                                                             Toast.LENGTH_SHORT).show();

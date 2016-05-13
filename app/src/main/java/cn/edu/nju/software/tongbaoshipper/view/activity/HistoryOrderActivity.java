@@ -98,8 +98,7 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
                                 else {
                                     order_state.setText("订单已取消，您可以删除记录");
                                     state_iv.setImageDrawable(getResources().getDrawable(R.drawable.order_cancel));
-                                    evaluation_view.setVisibility(View.VISIBLE);
-                                    evaluation_rating.setNumStars(3);
+                                    btn_ok.setEnabled(false);
 
                                 }
                                 order_id.setText(order.getId()+"");
@@ -115,7 +114,21 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
                                 for (int i=0;i<order.getTruckTypes().length();i++)
                                     sb.append(order.getTruckTypes().getString(i)+" ");
                                 truck_type.setText(sb.toString());
+                                if (!order.getDriverPhoneNum().equals(""))
+                                driver_tv.setText("司机号码: "+order.getDriverPhoneNum());
 
+                                if (order.getEvaluatePoint()<0)
+                                {
+                                    evaluation_view.setVisibility(View.GONE);
+                                }
+                                else
+                                {
+                                    evaluation_view.setVisibility(View.VISIBLE);
+                                    btn_ok.setEnabled(false);
+                                    evaluation_rating.setRating(order.getEvaluatePoint());
+                                    if (order.getEvaluateContent().equals("")) evaluation_text.setText("评语为空，空即是色");
+                                    else evaluation_text.setText(order.getEvaluateContent());
+                                }
 
 
                             } else {
@@ -288,6 +301,7 @@ public class HistoryOrderActivity extends AppCompatActivity implements View.OnCl
                         params.put("id", orderid);
                         params.put("evaluatePoint", (int)ratingBar.getRating()+"");
                         params.put("evaluate", remark_text.getText().toString());
+                        System.out.println("评分"+(int)ratingBar.getRating()+" 评论"+remark_text.getText().toString());
                         Request<JSONObject> request = new PostRequest(Net.URL_SHIPPER_EVALUATE_ORDER,
                                 new Response.Listener<JSONObject>() {
                                     @Override
