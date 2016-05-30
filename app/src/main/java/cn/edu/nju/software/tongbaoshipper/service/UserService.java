@@ -210,13 +210,14 @@ public class UserService {
     public static boolean getContacts(JSONObject jsonObject) {
         return false;
     }
+
     public static boolean getContactDetail(JSONObject jsonObject) {
         return false;
     }
 
 
     public static Driver getDriverDetail(JSONObject jsonObject) throws JSONException {
-        Driver driver=new Driver();
+        Driver driver = new Driver();
 
         if (getResult(jsonObject)) {
             JSONObject object = jsonObject.getJSONObject("data");
@@ -240,7 +241,7 @@ public class UserService {
         ArrayList<Message> arrMessage = new ArrayList<>();
         if (getResult(jsonObject)) {
             JSONArray data = jsonObject.getJSONArray("data");
-            for (int i = data.length() - 1; i >= 0; i--) {
+            for (int i = 0; i < data.length(); i++) {
                 Message message = new Message();
                 JSONObject object = data.getJSONObject(i);
                 message.setId(object.getInt("id"));
@@ -251,10 +252,16 @@ public class UserService {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                message.setHasRead(object.getBoolean("hasRead"));
+                System.out.println(object.getInt("hasRead"));
+                if (object.getInt("hasRead") != 0) {
+                    message.setHasRead(true);
+                } else {
+                    message.setHasRead(false);
+                }
                 message.setOrderID(object.getInt("objectId"));
                 arrMessage.add(message);
             }
+            arrMessage.trimToSize();
         }
         return arrMessage;
     }

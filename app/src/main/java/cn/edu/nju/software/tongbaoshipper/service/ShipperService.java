@@ -373,7 +373,7 @@ public class ShipperService {
 
     }
 
-
+/**/
     public static Order getTestOrder()
     {
         Order order=new Order("2016年4月25日 00:10:57","2016年4月25日 00:11:00","南京大学鼓楼校区","张三","124-3434-3234","南京大学仙林校区","李四","123-3434-3434");

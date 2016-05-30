@@ -40,7 +40,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="pdw1TpvZZTP5D5CPbPPuF2po1YDMPInT" />
+            android:value="pcNttBggMqTY2w9FSZOgSzcaqe9CojTi" />
 
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data
@@ -151,7 +151,7 @@
 
 
         <activity
-            android:name=".view.activity.FrameActivity"
+            android:name=".controller.activity.FrameActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -160,88 +160,88 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.UserActivity"
+            android:name=".controller.activity.UserActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.LoginActivity"
+            android:name=".controller.activity.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.RegisterActivity"
+            android:name=".controller.activity.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.ChangePasswordActivity"
+            android:name=".controller.activity.ChangePasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.WalletActivity"
+            android:name=".controller.activity.WalletActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AddAddressActivity"
+            android:name=".controller.activity.AddAddressActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.WithdrawActivity"
+            android:name=".controller.activity.WithdrawActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AccountActivity"
+            android:name=".controller.activity.AccountActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.SettingActivity"
+            android:name=".controller.activity.SettingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.MapActivity"
+            android:name=".controller.activity.MapActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.RechargeActivity"
+            android:name=".controller.activity.RechargeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.MessageActivity"
+            android:name=".controller.activity.MessageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.FeedbackActivity"
+            android:name=".controller.activity.FeedbackActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AboutActivity"
+            android:name=".controller.activity.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AddressActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".view.activity.PlaceOrderActivity"
-            android:theme="@style/Theme.picker"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.activity.ChangeAddressActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.activity.DriverActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.activity.AddDriverActivity"
+            android:name=".controller.activity.AddressActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".view.activity.DatePickerActivity"
+            android:name=".controller.activity.PlaceOrderActivity"
             android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AllTruckActivity"
+            android:name=".controller.activity.ChangeAddressActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AddressFromActivity"
+            android:name=".controller.activity.DriverActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.AddressToActivity"
+            android:name=".controller.activity.AddDriverActivity"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name=".view.activity.RunningOrderActivity"
+            android:name=".controller.activity.DatePickerActivity"
             android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.WaitingOrderActivity"
+            android:name=".controller.activity.AllTruckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".controller.activity.AddressFromActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".controller.activity.AddressToActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".controller.activity.RunningOrderActivity"
             android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.HistoryOrderActivity"
+            android:name=".controller.activity.WaitingOrderActivity"
+            android:theme="@style/Theme.picker"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".controller.activity.HistoryOrderActivity"
             android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
 
